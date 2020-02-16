@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var ApplicationSchema = new Schema({
   statusName: {
     type: String,
+    default: 'PENDING',
     enum: ['PENDING', 'REJECTED', 'DUE', 'ACCEPTED', 'CANCELLED']
   },
   statusReason: {
