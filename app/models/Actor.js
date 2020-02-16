@@ -15,21 +15,21 @@ var ActorSchema = new Schema({
     type: String,
     required: 'Email must be provided',
     unique: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']    
+    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
   },
   password: {
     type: String,
-    minlength:8,
+    minlength: 8,
     required: 'Password must be provided',
   },
-  preferredLanguage:{
-    type : String,
-    default : "en"
+  preferredLanguage: {
+    type: String,
+    default: "en"
   },
   phone: {
     type: String
   },
-  address:{
+  address: {
     type: String
   },
   role: [{
@@ -37,9 +37,9 @@ var ActorSchema = new Schema({
     required: 'Role must be provided',
     enum: ['SPONSOR', 'MANAGER', 'ADMINISTRATOR', 'EXPLORER']
   }],
-  active:{
+  active: {
     type: Boolean,
-    default: false
+    default: true
   },
   created: {
     type: Date,

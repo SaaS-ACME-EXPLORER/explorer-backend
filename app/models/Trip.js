@@ -13,32 +13,33 @@ var TripSchema = new Schema({
   },
   description: {
     type: String,
-    required: 'Description must be provided'  
+    required: 'Description must be provided'
   },
   price: {
     type: Number,
+    min: 0,
     required: 'Price must be provided',
   },
-  requeriments:{
-    type : [String],
+  requeriments: {
+    type: [String],
     required: 'Requeriments must be provided'
   },
-  starts: {
+  startDate: {
     type: Date,
     required: 'Start date must be provided'
   },
-  ends:{
+  endDate: {
     type: Date,
     required: 'End date must be provided'
   },
-  cancelled:{
+  cancelled: {
     type: Boolean,
     default: false
   },
-  statusReason: [{
+  cancelledReason: {
     type: String
-  }],
-  public:{
+  },
+  public: {
     type: Boolean,
     default: false
   },
@@ -49,9 +50,12 @@ var TripSchema = new Schema({
   managedBy: {
     type: String,
     required: 'Manager ID must be provided'
-  }
+  },
+  pictures: [{
+    data: Buffer,
+    contentType: String,
+    required: 'Banner must be provided'
+  }],
 }, { strict: false });
 
 module.exports = mongoose.model('Trip', TripSchema);
-
-//FALTAN LAS IMAGENES
