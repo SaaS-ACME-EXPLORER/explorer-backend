@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ApplicationSchema = new Schema({
-  statusName: {
+  status: {
     type: String,
     default: 'PENDING',
     enum: ['PENDING', 'REJECTED', 'DUE', 'ACCEPTED', 'CANCELLED']
@@ -15,14 +15,17 @@ var ApplicationSchema = new Schema({
     type: Boolean,
     default: false
   },
-  ticker: {
+  tripId: {
     type: String,
-    required: "Trip's Ticker ID must be provided"
+    required: "Trip ID must be provided"
   },
   explorerId: {
     type: String,
     required: "Explorer ID must be provided"
   },
+  comments: [{
+    type: String,
+  }],
   created: {
     type: Date,
     default: Date.now

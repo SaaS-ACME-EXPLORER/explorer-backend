@@ -3,10 +3,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var StageSchema = new Schema({
-  ticker: {
-    type: String,
-    required: "Trip's Ticker ID must be provided"
-  },
   title: {
     type: String,
     required: "Title must be provided"

@@ -7,17 +7,23 @@ var SponsorshipSchema = new Schema({
     type: Number,
     required: 'Sponsor ID must be provided'
   },
-  ticker: {
-    type: String,
-    required: "Ticker's Trip must be provided"
-  },
-  amount: {
+  tripId: {
     type: Number,
-    required: 'Amount must be provided'
+    required: 'Trip ID must be provided'
+  },
+  paid: {
+    type: Boolean,
+    required: 'Paid must be provided',
+    default: false
   },
   link: {
     type: String,
     required: 'Link must be provided'
+  },
+  banner: {
+    data: Buffer,
+    contentType: String,
+    required: 'Banner must be provided'
   },
   created: {
     type: Date,
