@@ -1,6 +1,6 @@
 'use strict';
 module.exports = function(app) {
-    var items = require('../controllers/controller');
+    var dummy = require('../controllers/controller');
 
     //min max avg or standar deviation per managers
     app.route(BASE_API_PATH + '/stats/byManagers')
