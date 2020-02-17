@@ -1,7 +1,7 @@
 'use strict';
 /*---------------ACTOR----------------------*/
-var mongoose = require('mongoose'),
-    Actor = mongoose.model('Actor');
+const mongoose = require('mongoose');
+const actor = require('../models/Actor');
 
 exports.list_all_actors = function (req, res) {
     res.status(200).send("OK");
