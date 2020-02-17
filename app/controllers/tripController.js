@@ -1,7 +1,7 @@
 'use strict';
 /*---------------TRIP----------------------*/
-const mongoose = require('mongoose');
-const trip = require('../models/Trip');
+
+const Trip = require('../models/Trip');
 
 exports.list_all_trips = function (req, res) {
     res.status(200).send("OK");

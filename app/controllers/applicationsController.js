@@ -1,7 +1,7 @@
 'use strict';
 /*---------------APPLICATION----------------------*/
-const mongoose = require('mongoose');
-const application = require('../models/Application');
+
+const Application = require('../models/Application');
 
 exports.list_all_applications = function(req, res) {
     res.status(200).send("OK");
