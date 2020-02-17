@@ -1,10 +1,10 @@
-var actorRoutes = require('./api/routes/actorRoutes');
-var adminRoutes = require('./api/routes/adminRoutes');
-var applicationRoutes = require('./api/routes/applicationRoutes');
-var finderRoutes = require('./api/routes/finderRoutes');
-var sponsorshipRoutes = require('./api/routes/sponsorshipRoutes');
-var statRoutes = require('./api/routes/statRoutes');
-var tripRoutes = require('./api/routes/tripRoutes');
+var actorRoutes = require('./actorRoutes');
+var adminRoutes = require('./adminRoutes');
+var applicationRoutes = require('./applicationRoutes');
+var finderRoutes = require('./finderRoutes');
+var sponsorshipRoutes = require('./sponsorshipRoutes');
+var statRoutes = require('./statRoutes');
+var tripRoutes = require('./tripRoutes');
 
 
 module.exports = (app) => {

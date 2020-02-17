@@ -14,8 +14,7 @@ logger.info('Setting up API server');
 app.use(httpLogger);
 app.use(bodyParser.json());
 
-// Require routes routes
-require('./app/routes/')(app);
+
 
 // Setting up database
 logger.info("Setting up database");
@@ -26,6 +25,8 @@ logger.info(`Connecting to ${config.url}!`);
 
 dbConnect().then(() => {
     logger.info("Successfully connected to the database")
+    // Require routes routes
+    require('./app/routes/')(app);
     app.listen(config.port, () => {
         logger.info(`Express App listening on port ${config.port}!`)
         // require('./app/services/populate.js').populate();

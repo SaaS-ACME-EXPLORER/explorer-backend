@@ -8,13 +8,13 @@ const dbConnect = () => {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
-        reconnectTries: 10,
-        reconnectInterval: 500,
         poolSize: 10, // Up to 10 sockets
         connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
         socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
         family: 4, // skip trying IPv6
+        useUnifiedTopology: true
     });
+
 }
 
 module.exports = dbConnect;

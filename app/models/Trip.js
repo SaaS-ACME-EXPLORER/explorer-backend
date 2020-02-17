@@ -50,12 +50,7 @@ var TripSchema = new Schema({
   managedBy: {
     type: String,
     required: 'Manager ID must be provided'
-  },
-  pictures: [{
-    data: Buffer,
-    contentType: String,
-    required: 'Banner must be provided'
-  }],
+  }
 }, { strict: false });
 
 module.exports = mongoose.model('Trip', TripSchema);

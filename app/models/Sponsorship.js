@@ -20,11 +20,6 @@ var SponsorshipSchema = new Schema({
     type: String,
     required: 'Link must be provided'
   },
-  banner: {
-    data: Buffer,
-    contentType: String,
-    required: 'Banner must be provided'
-  },
   created: {
     type: Date,
     default: Date.now
