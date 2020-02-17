@@ -7,8 +7,6 @@ module.exports = (app) => {
     app.put(BASE_API_PATH + '/actors/:actor_id', dummy.dummy) //update personal data 
     app.put(BASE_API_PATH + '/actors/:actor_id/activate', dummy.dummy) //change activate status to a actor ; ban or unban
     
-
-
     //trips
     app.get(BASE_API_PATH + '/trips',dummy.dummy); //list trips or filtered by questystring = keyword
     app.post(BASE_API_PATH + '/trips',dummy.dummy); //create new trip
@@ -16,7 +14,6 @@ module.exports = (app) => {
     app.put(BASE_API_PATH + '/trips/:trip_id',dummy.dummy); //update trip  
     app.put(BASE_API_PATH + '/trips/:trip_id/cancel',dummy.dummy); //cancel trip  (only is able to cancel and not opening) --REASON IS A MUST
     app.delete(BASE_API_PATH + '/trips/:trip_id',dummy.dummy); //delete trip
-
 
     //applications
     app.post(BASE_API_PATH + '/applications',dummy.dummy); //create app to a trip; included actorId and ticker
@@ -30,7 +27,6 @@ module.exports = (app) => {
     app.get(BASE_API_PATH + '/stats/byPriceTrips',dummy.dummy);//min max avg or standar deviation per trips
     app.get(BASE_API_PATH + '/stats/byPriceTrips',dummy.dummy);//min max avg or standar deviation per trips
     app.get(BASE_API_PATH + '/stats/byApplications',dummy.dummy);//min max avg or standar deviation per trips
-
 
     //finder
     app.get(BASE_API_PATH + '/finders/:finder_id',dummy.dummy); //get finder; querystring actor_id(ONLY for explorer, validated)
