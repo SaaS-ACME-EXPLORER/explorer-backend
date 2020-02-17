@@ -28,4 +28,3 @@ var FinderSchema = new Schema({
 
 module.exports = mongoose.model('Resource', FinderSchema);
 
-//FALTAN LAS IMAGENES
