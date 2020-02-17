@@ -1,18 +1,18 @@
 'use strict';
 module.exports = function(app) {
 
-    const dummy = require('../controllers/controller');
+    var trips = require('../controllers/tripController');
 
     app.route(BASE_API_PATH + '/trips')
-        .get(dummy.dummy) //list trips or filtered by questystring = keyword
-        .post(dummy.dummy); //create new trip
+        .get(trips.list_all_trips) //list trips or filtered by questystring = keyword
+        .post(trips.create_a_trip); //create new trip
 
     app.route(BASE_API_PATH + '/trips/:trip_id')
-        .get(dummy.dummy) //get 1 trip
-        .put(dummy.dummy) //update trip
-        .delete(dummy.dummy); //delete trip
+        .get(trips.read_a_trip) //get 1 trip
+        .put(trips.update_a_trip) //update trip
+        .delete(trips.delete_a_trip); //delete trip
 
     app.route(BASE_API_PATH + '/trips/:trip_id/cancel')
-        .put(dummy.dummy); //cancel trip  (only is able to cancel and not opening) --REASON IS A MUST
+        .put(trips.cancel_a_trip); //cancel trip  (only is able to cancel and not opening) --REASON IS A MUST
 
 };

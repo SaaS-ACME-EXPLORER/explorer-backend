@@ -1,19 +1,19 @@
 'use strict';
 module.exports = function(app) {
 
-    const dummy = require('../controllers/controller');
+    const applications = require('../controllers/applicationsController');
 
     app.route(BASE_API_PATH + '/applications')
-        .post(dummy.dummy) //create app to a trip; included actorId and ticker
-        .get(dummy.dummy); //List all applications
+        .post(applications.create_an_application) //create app to a trip; included actorId and ticker
+        .get(applications.list_all_applications); //List all applications
 
     app.route(BASE_API_PATH + 'applications/:app_id')
-        .get(dummy.dummy); //get an apply;
+        .get(applications.read_an_application); //get an apply;
     
     app.route(BASE_API_PATH + '/applications/:app_id/pay')
-        .put(dummy.dummy); //pay a trip send amount
+        .put(applications.pay_an_application); //pay a trip send amount
 
     app.route(BASE_API_PATH + '/applications/:app_id/status')
-        .put(dummy.dummy); //update state and it is reason if it is cancel or rejected;
+        .put(applications.change_an_application_status); //update state and it is reason if it is cancel or rejected;
 
 };
