@@ -53,4 +53,8 @@ var TripSchema = new Schema({
   }
 }, { strict: false });
 
+TripSchema.index({ startDate: 1, endDate: 1 });
+TripSchema.index({ title: 'text', description: 'text', ticker: 'text' });
+
+
 module.exports = mongoose.model('Trip', TripSchema);
