@@ -12,7 +12,7 @@ exports.list_all_actors = function (req, res) {
     //Adapt to find the actors with the specified role
     Actor.find({ role: roleName }, function (err, actors) {
         if (err) {
-            res.status(500).send(err);
+            res.status(400).send(err);
         }
         else {
             res.json(actors);
@@ -25,7 +25,7 @@ exports.create_an_actor = function (req, res) {
 
     new_actor.save(function (err, actor) {
         if (err) {
-            res.status(500).send(err);
+            res.status(400).send(err);
         }
         else {
             res.json(actor);
