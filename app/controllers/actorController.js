@@ -81,6 +81,6 @@ exports.change_an_actor_status = function (req, res) {
         });
 
     } else {
-        res.status(402).send(err);
+        res.status(400).send(err);
     }
 };
