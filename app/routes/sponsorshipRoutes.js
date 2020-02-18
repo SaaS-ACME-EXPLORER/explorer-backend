@@ -1,18 +1,18 @@
 'use strict';
 module.exports = function (app) {
-    const dummy = require('../controllers/controller')
+    const Sponsorship = require('../controllers/sponsorshipController')
 
     app.route(BASE_API_PATH + '/sponsorships')
-        .get(dummy.dummy) //list sponsorships or filtered by questystring = actorId
-        .post(dummy.dummy); //create new trip
+        .get(Sponsorship.list_all_sponsorships) //list sponsorships or filtered by questystring = actorId
+        .post(Sponsorship.create_sponsorship); //create new trip
 
     app.route(BASE_API_PATH + '/sponsorships/:sponsorship_id')
-        .get(dummy.dummy) //get 1 sponsorship
-        .put(dummy.dummy); //update sponsorship  
+        .get(Sponsorship.get_a_sponsorship) //get 1 sponsorship
+        .put(Sponsorship.update_a_sponsorship); //update sponsorship  
 
     app.route(BASE_API_PATH + '/sponsorships/:sponsorship_id/pay')
-        .put(dummy.dummy); //pay a sponsorship  
+        .put(Sponsorship.pay_a_sponsorship); //pay a sponsorship  
 
     app.route(BASE_API_PATH + '/sponsorships/:sponsorship_id')
-        .delete(dummy.dummy); //delete sponsorship
+        .delete(Sponsorship.delete_a_sponsorship); //delete sponsorship
 };
