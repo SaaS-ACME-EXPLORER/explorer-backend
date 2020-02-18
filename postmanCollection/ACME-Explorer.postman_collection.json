@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "81a741cb-4f5f-4640-9de1-bb774f8d3540",
+		"name": "ACME-Explorer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET ALL ACTORS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/actors/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST ACTOR-ADMIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"AdminName\",\n\t\"surname\": \"AdminSurname\",\n\t\"email\": \"admin@fakemail.com\",\n\t\"password\": \"mypass\",\n\t\"phone\": \"+34612345670\",\n\t\"role\": \"ADMINISTRATOR\",\n\t\"address\": \"myAddress\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/actors",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT ITEM",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\t    \"deleted\": \"false\",\n\t\t    \"name\": \"Mac Book Air\",\n\t\t    \"description\": \"Thin laptop from Apple\",\n\t\t    \"price\": 1600,\n\t\t    \"category\": \"5c540db609d0f74808f00805\",\n\t\t    \"comments\":[\n\t\t\t    {\n\t\t\t    \t\"title\": \"Great\",\n\t\t  \t\t\t\"commentText\": \"New keyboard is smooth\",\n\t\t  \t\t\t\"stars\": 5\n\t\t  \t\t},\n\t\t \t\t{\n\t\t \t\t    \"title\": \"Very good device.\",\n\t\t  \t\t\t\"commentText\": \"Frames around the screen are thinner than ever\",\n\t\t  \t\t\t\"stars\": 4\n\t\t \t\t}\n\t\t \t]\n\t\t}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/items/5c5410a9f0481f4870337184",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"items",
+						"5c5410a9f0481f4870337184"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE ITEM",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"CustomerEDITEDName\",\n\t\"surname\": \"CustomerSurname\",\n\t\"email\": \"customer@fakemail.com\",\n\t\"password\": \"mypass\",\n\t\"phone\": \"+34612345678\",\n\t\"role\": \"CUSTOMER\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/items/5c540db609d0f74808f00805",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"items",
+						"5c540db609d0f74808f00805"
+					]
+				},
+				"description": "Include previously generated id"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

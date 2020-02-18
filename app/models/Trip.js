@@ -1,8 +1,9 @@
 'use strict';
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const generate = require('nanoid/generate');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var TripSchema = new Schema({
+const TripSchema = new Schema({
   ticker: {
     type: String,
     required: 'Ticker must be provided'
@@ -50,7 +51,20 @@ var TripSchema = new Schema({
   managedBy: {
     type: String,
     required: 'Manager ID must be provided'
-  }
+  },
+  img:
+    [{ data: Buffer, contentType: String }]
 }, { strict: false });
+
+TripSchema.index({ startDate: 1, endDate: 1 });
+TripSchema.index({ title: 'text', description: 'text', ticker: 'text' });
+
+// Execute before each item.save() call
+TripSchema.pre('save', function (callback) {
+  var newTrip = this;
+  newTrip.ticker = generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6);
+  callback();
+});
+
 
 module.exports = mongoose.model('Trip', TripSchema);
