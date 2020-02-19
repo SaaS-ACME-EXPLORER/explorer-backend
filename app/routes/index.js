@@ -5,6 +5,8 @@ var finderRoutes = require('./finderRoutes');
 var sponsorshipRoutes = require('./sponsorshipRoutes');
 var statRoutes = require('./statRoutes');
 var tripRoutes = require('./tripRoutes');
+var storageRoutes = require('./storageRoutes');
+
 
 
 module.exports = (app) => {
@@ -17,4 +19,5 @@ module.exports = (app) => {
     sponsorshipRoutes(app);
     statRoutes(app);
     tripRoutes(app);
+    storageRoutes(app);
 }

@@ -8,6 +8,8 @@ const { httpLogger, logger } = require('./app/utils');
 
 
 global.BASE_API_PATH = "/api/v1"
+global.BASE_DIR = __dirname;
+
 var app = express();
 logger.info('Setting up API server');
 
