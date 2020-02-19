@@ -3,7 +3,7 @@ var adminRoutes = require('./adminRoutes');
 var applicationRoutes = require('./applicationRoutes');
 var finderRoutes = require('./finderRoutes');
 var sponsorshipRoutes = require('./sponsorshipRoutes');
-var statRoutes = require('./statRoutes');
+var statRoutes = require('./statsRoutes');
 var tripRoutes = require('./tripRoutes');
 var storageRoutes = require('./storageRoutes');
 

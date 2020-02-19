@@ -1,6 +1,7 @@
 'use strict';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var bcrypt = require('bcrypt');
 
 var ActorSchema = new Schema({
   name: {
@@ -46,5 +47,31 @@ var ActorSchema = new Schema({
     default: Date.now
   }
 }, { strict: false });
+
+ActorSchema.pre('save', function (callback) {
+  var actor = this;
+  // Break out if the password hasn't changed
+  if (!actor.isModified('password')) return callback();
+
+  // Password changed so we need to hash it
+  bcrypt.genSalt(5, function (err, salt) {
+    if (err) return callback(err);
+
+    bcrypt.hash(actor.password, salt, function (err, hash) {
+      if (err) return callback(err);
+      actor.password = hash;
+      callback();
+    });
+  });
+});
+
+ActorSchema.methods.verifyPassword = function (password, cb) {
+  bcrypt.compare(password, this.password, function (err, isMatch) {
+    console.log('verifying password in actorModel: ' + password);
+    if (err) return cb(err);
+    console.log('iMatch: ' + isMatch);
+    cb(null, isMatch);
+  });
+};
 
 module.exports = mongoose.model('Actor', ActorSchema);
