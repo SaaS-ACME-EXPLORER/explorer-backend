@@ -33,11 +33,11 @@ var ActorSchema = new Schema({
   address: {
     type: String
   },
-  role: [{
+  role: {
     type: String,
     required: 'Role must be provided',
     enum: ['SPONSOR', 'MANAGER', 'ADMINISTRATOR', 'EXPLORER']
-  }],
+  },
   active: {
     type: Boolean,
     default: true
@@ -48,7 +48,7 @@ var ActorSchema = new Schema({
   }
 }, { strict: false });
 
-ActorSchema.pre('save', function (callback) {
+ActorSchema.pre('findOneAndUpdate', function (callback) {
   var actor = this;
   // Break out if the password hasn't changed
   if (!actor.isModified('password')) return callback();
@@ -64,6 +64,7 @@ ActorSchema.pre('save', function (callback) {
     });
   });
 });
+
 
 ActorSchema.methods.verifyPassword = function (password, cb) {
   bcrypt.compare(password, this.password, function (err, isMatch) {

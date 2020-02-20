@@ -5,12 +5,14 @@ const Actor = require('../models/Actor');
 
 exports.list_all_actors = function (req, res) {
     //Check if the role param exist
-    var roleName;
+    
     if (req.query.role) {
-        roleName = req.query.role;
+        var query = {};
+        query.role = req.query.role;
     }
+
     //Adapt to find the actors with the specified role
-    Actor.find({ role: roleName }, function (err, actors) {
+    Actor.find(query, function (err, actors) {
         if (err) {
             res.status(400).send(err);
         }
@@ -36,7 +38,7 @@ exports.create_an_actor = function (req, res) {
 exports.read_an_actor = function (req, res) {
     Actor.findById(req.params.actorId, function (err, actor) {
         if (err) {
-            res.status(500).send(err);
+            res.status(404).send(err);
         }
         else {
             res.json(actor);
