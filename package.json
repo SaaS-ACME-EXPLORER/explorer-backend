@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --inspect ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/SaaS-ACME-EXPLORER/explorer-backend#readme",
   "devDependencies": {
+    "dummy-json": "^2.0.0",
     "nodemon": "^2.0.2"
   },
   "dependencies": {

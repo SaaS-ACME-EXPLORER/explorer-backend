@@ -1,0 +1,36 @@
+{
+"Trip": [
+      {{#repeat 2500}}
+        {
+          "ticker": "{{@guid}}",
+          "title": "{{lorem 5}}",
+          "description": "{{lorem 15}}",
+          "price": "{{int 0 1000}}",
+          "requeriments": "{{lorem 15}}",
+          "startDate": "{{date '2010' '2020'}}",
+          "endDate": "{{date '2010' '2020'}}",
+          "cancelled": {{boolean}},
+          "public": {{boolean}},
+          "managedBy": "{{@guid}}"
+        }
+    {{/repeat}}
+  ],
+"Actor": [
+      {{#repeat 2000}}
+        {
+          "name": "{{firstName}}",
+          "surname": "{{lastName}}",
+          "email": "{{email}}.com",
+          "password": "{{@guid}}",
+          "preferredLanguage": "{{language}}",
+          "phone": "{{phone}}",
+          "address": "{{int 1 100}} {{street}}",
+          "role": "{{role}}",
+          "active": {{boolean}},
+          "managedBy": "{{@guid}}"
+        }
+    {{/repeat}}
+  ]
+}
+
+  
