@@ -1,6 +1,6 @@
 {
-"Trip": [
-      {{#repeat 2500}}
+  "Trip": [
+      {{#repeat 2000}}
         {
           "ticker": "{{@guid}}",
           "title": "{{lorem 5}}",
@@ -15,12 +15,12 @@
         }
     {{/repeat}}
   ],
-"Actor": [
+  "Actor": [
       {{#repeat 2000}}
         {
           "name": "{{firstName}}",
           "surname": "{{lastName}}",
-          "email": "{{email}}.com",
+          "email": "{{email}}",
           "password": "{{@guid}}",
           "preferredLanguage": "{{language}}",
           "phone": "{{phone}}",
@@ -30,7 +30,41 @@
           "managedBy": "{{@guid}}"
         }
     {{/repeat}}
+  ],
+"Application": [
+      {{#repeat 2000}}
+        {
+          "status": "{{status}}",
+          "paid": {{boolean}},
+          "tripId": "{{@guid}}",
+          "explorerId": "www.{{company}}.com",
+          "comments":[
+                      {{#repeat 3}}
+                      "{{lorem 15}}"
+                      {{/repeat}}
+                    ]
+        }
+    {{/repeat}}
+  ],
+  "Stage": [
+      {{#repeat 2000}}
+        {
+          "title": "{{city}} ({{country}} with {{company}}",
+          "description": "{{lorem 15}}",
+          "price": "{{int 0 1000}}"
+        }
+    {{/repeat}}
+  ],
+"Sponsorship": [
+      {{#repeat 2000}}
+        {
+          "sponsorId": "{{@guid}}",
+          "tripId": "{{@guid}}",
+          "paid": {{boolean}},
+          "link": "www.{{company}}.com"
+        }
+    {{/repeat}}
   ]
+ 
 }
 
-  
