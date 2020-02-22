@@ -48,8 +48,9 @@ var ActorSchema = new Schema({
   }
 }, { strict: false });
 
-ActorSchema.pre('findOneAndUpdate', function (callback) {
+ActorSchema.pre('save', function (callback) {
   var actor = this;
+
   // Break out if the password hasn't changed
   if (!actor.isModified('password')) return callback();
 
@@ -64,7 +65,6 @@ ActorSchema.pre('findOneAndUpdate', function (callback) {
     });
   });
 });
-
 
 ActorSchema.methods.verifyPassword = function (password, cb) {
   bcrypt.compare(password, this.password, function (err, isMatch) {

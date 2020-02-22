@@ -47,12 +47,18 @@ exports.read_an_actor = function (req, res) {
 };
 
 exports.update_an_actor = function (req, res) {
-    Actor.findOneAndUpdate({ _id: req.params.actorId }, req.body, { new: true }, function (err, actor) {
+    Actor.findById(req.params.actorId, function (err, actor) {
         if (err) {
-            res.status(500).send(err);
-        }
-        else {
-            res.json(actor);
+            res.status(404).send(err);
+        } else {
+            var actor_updated = copyProperties(new Actor(req.body), actor);
+            actor_updated.save(function(err, saved){
+                if (err) {
+                    res.status(400).send(err);
+                } else {
+                    res.json(saved);
+                }
+            });
         }
     });
 };
@@ -86,3 +92,16 @@ exports.change_an_actor_status = function (req, res) {
         res.status(400).send(err);
     }
 };
+
+let copyProperties = function copyProperties(source_obj, new_obj){
+    new_obj.name = source_obj.name;
+    new_obj.surname = source_obj.surname;
+    //new_obj.email = source_obj.email;
+    new_obj.preferredLanguage = source_obj.preferredLanguage;
+    new_obj.phone = source_obj.phone;
+    new_obj.address = source_obj.address;
+    new_obj.role = source_obj.role;
+    new_obj.active = source_obj.active;
+    new_obj.password = source_obj.password;
+    return new_obj;
+}
