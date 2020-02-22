@@ -1,0 +1,65 @@
+{
+  "model": [
+ 
+  {{#repeat 3}}
+    {
+      "ActorId": "{{actorId}}",
+      "TripId": "{{tripId}}",
+      "StageId": "{{stageId}}", 
+      "Trip": 
+            { 
+              "ticker": "{{tripId}}",
+              "title": "{{lorem 5}}",
+              "description": "{{lorem 15}}",
+              "price": "{{int 0 1000}}",
+              "requeriments": "{{lorem 15}}",
+              "startDate": "{{date '2010' '2020'}}",
+              "endDate": "{{date '2010' '2020'}}",
+              "cancelled": {{boolean}},
+              "public": {{boolean}},
+              "managedBy": "{{@guid}}"
+            },
+      "Actor": 
+            {
+              "name": "{{firstName}}",
+              "surname": "{{lastName}}",
+              "email": "{{email}}",
+              "password": "{{@guid}}",
+              "preferredLanguage": "{{language}}",
+              "phone": "{{phone}}",
+              "address": "{{int 1 100}} {{street}}",
+              "role": "{{role}}",
+              "active": {{boolean}},
+              "managedBy": "{{@guid}}"
+            },
+      "Application": 
+            {
+              "status": "{{status}}",
+              "paid": {{boolean}},
+              "tripId": "{{@guid}}",
+              "explorerId": "www.{{company}}.com",
+              "comments":[
+                          {{#repeat 3}}
+                          "{{lorem 15}}"
+                          {{/repeat}}
+                        ]
+            },
+      "Stage": 
+            {
+              "tripId": {{tripId}}
+              "title": "{{city}} ({{country}} with {{company}}",
+              "description": "{{lorem 15}}",
+              "price": "{{int 0 1000}}"
+            },
+     "Sponsorship": 
+            {
+              "sponsorId": "{{@guid}}",
+              "tripId": "{{tripId}}",
+              "paid": {{boolean}},
+              "link": "www.{{company}}.com"
+            }
+    }
+  {{/repeat}}
+  ]
+}
+

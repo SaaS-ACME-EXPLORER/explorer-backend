@@ -4,11 +4,11 @@ var Schema = mongoose.Schema;
 
 var SponsorshipSchema = new Schema({
   sponsorId: {
-    type: Number,
+    type: String,
     required: 'Sponsor ID must be provided'
   },
   tripId: {
-    type: Number,
+    type: String,
     required: 'Trip ID must be provided'
   },
   paid: {

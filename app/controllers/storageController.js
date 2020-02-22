@@ -1,5 +1,15 @@
 'use strict';
+const mongoose = require('mongoose');
+const generate = require('nanoid/generate');
+
 const logger = require('../utils/logger');
+const Trip = require('../models/Trip');
+const Application = require('../models/Application');
+const Finder = require('../models/Finder');
+const Sponsorship = require('../models/Sponsorship');
+const Actor = require('../models/Actor');
+const Stage = require('../models/Stage');
+
 
 
 exports.store_json_insertMany = function (req, res) {
@@ -15,11 +25,32 @@ exports.store_json_insertMany = function (req, res) {
     },
     role: function () {
       return dummyjson.utils.randomArrayItem(['SPONSOR', 'MANAGER', 'ADMINISTRATOR', 'EXPLORER']);
+    },
+    status: function () {
+      return dummyjson.utils.randomArrayItem(['PENDING', 'REJECTED', 'DUE', 'ACCEPTED', 'CANCELLED']);
+    },
+    actorId: function () {
+      return generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
+    },
+    tripId: function () {
+      return generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
+    },
+    stageId: function () {
+      return generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
     }
+
+
   };
 
+  // version con json separado por modelo
   var templates = fs.readFileSync(BASE_DIR + '\\app\\utils\\templates.hbs', { encoding: 'utf8' });
   var parsedTemplate = JSON.parse(dummyjson.parse(templates, { helpers: myHelpers }));
+
+  // intento de sincronizacion, todo dentro del mismo objecto
+  // var templates = fs.readFileSync(BASE_DIR + '\\app\\utils\\templates2.hbs', { encoding: 'utf8' });
+  // dummyjson.seed = 'helloworld';
+  // var parsed = dummyjson.parse(templates, { helpers: myHelpers });
+  // var parsedTemplate = JSON.parse(dummyjson.parse(templates, { helpers: myHelpers }));
 
 
   if (parsedTemplate) {
@@ -28,8 +59,7 @@ exports.store_json_insertMany = function (req, res) {
 
       mongooseModel = key;
       source = parsedTemplate[key];
-      var mongoose = require('mongoose'),
-        collectionModel = mongoose.model(mongooseModel);
+      var collectionModel = mongoose.model(mongooseModel);
 
       console.log('Inserting ' + source.length + ' documents into the Model ' + mongooseModel);
       collectionModel.insertMany(source, function (err, result) {
@@ -37,8 +67,9 @@ exports.store_json_insertMany = function (req, res) {
           console.log(err);
           res.send(err);
         } else {
-          response += 'All documents stored in the collection!';
-          console.log(response);
+          res = 'All documents stored in the ' + mongooseModel;
+          console.log(res);
+          response += res;
         }
       });
     });
