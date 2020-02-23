@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const TripSchema = new Schema({
   ticker: {
     type: String,
-    required: 'Ticker must be provided'
+    unique: true
   },
   title: {
     type: String,

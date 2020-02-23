@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "dea2e98e-9a1d-4288-8892-67a7cca6d09c",
+		"name": "Trips",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET ALL TRIPS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/trips?limit=10&page=1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"trips"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "page",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT TRIP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\r\n    \"requeriments\": [\r\n        \"Tincidunt imperdiet amet tempor amet, ante quisque imperdiet eros amet i leo sapien aenean ut.\"\r\n    ],\r\n    \"cancelled\": true,\r\n    \"public\": true,\r\n    \"title\": \"Erat quis ac tincidunt dolor.\",\r\n    \"description\": \"Aenean gravida ligula ante finibus est morbi leo ut, magna neque non lectus blandit aliquam.\",\r\n    \"price\": 471,\r\n    \"startDate\": \"2012-12-19T14:15:23.000Z\",\r\n    \"endDate\": \"2012-08-05T23:42:52.000Z\",\r\n    \"managedBy\": \"e67ba32e-25e0-4b1f-893b-e5258ad8c5ad\",\r\n    \"img\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/trips/",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"trips",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET TRIP by ticker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/trips/adf67ef7-a275-4a53-b4c7-a69c42a290f3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"trips",
+						"adf67ef7-a275-4a53-b4c7-a69c42a290f3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT TRIP",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"requeriments\": [\r\n        \"Tincidunt imperdiet amet tempor amet, ante quisque imperdiet eros amet i leo sapien aenean ut.\"\r\n    ],\r\n    \"cancelled\": false,\r\n    \"public\": true,\r\n    \"title\": \"Erat quis ac tincidunt dolor.\",\r\n    \"description\": \"Aenean gravida ligula ante finibus est morbi leo ut, magna neque non lectus blandit aliquam.\",\r\n    \"price\": 471,\r\n    \"startDate\": \"2012-12-19T14:15:23.000Z\",\r\n    \"endDate\": \"2012-08-05T23:42:52.000Z\",\r\n    \"managedBy\": \"e67ba32e-25e0-4b1f-893b-e5258ad8c5ad\",\r\n    \"img\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/trips/fU1nuJ",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"trips",
+						"fU1nuJ"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE TRIP",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/trips/adf67ef7-a275-4a53-b4c7-a69c42a290f3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"trips",
+						"adf67ef7-a275-4a53-b4c7-a69c42a290f3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CANCEL TRIP",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"requeriments\": [\r\n        \"Tincidunt imperdiet amet tempor amet, ante quisque imperdiet eros amet i leo sapien aenean ut.\"\r\n    ],\r\n    \"cancelled\": true,\r\n    \"public\": true,\r\n    \"title\": \"Erat quis ac tincidunt dolor.\",\r\n    \"description\": \"Aenean gravida ligula ante finibus est morbi leo ut, magna neque non lectus blandit aliquam.\",\r\n    \"price\": 471,\r\n    \"startDate\": \"2012-12-19T14:15:23.000Z\",\r\n    \"endDate\": \"2012-08-05T23:42:52.000Z\",\r\n    \"managedBy\": \"e67ba32e-25e0-4b1f-893b-e5258ad8c5ad\",\r\n    \"img\": []\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/trips/fU1nuJ/cancel",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"trips",
+						"fU1nuJ",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
