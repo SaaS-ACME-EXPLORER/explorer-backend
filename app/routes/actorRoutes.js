@@ -4,13 +4,13 @@ module.exports = function (app) {
 
   app.route(BASE_API_PATH + '/actors')
     .get(actors.list_all_actors) //list 
-    .post(actors.create_an_actor); //signup
+    .post(actors.create_an_actor) //signup
+    .put(actors.update_an_actor); //update personal data 
 
   app.route(BASE_API_PATH + '/actors/:actorId')
     .get(actors.read_an_actor) //get actor information
-    .put(actors.update_an_actor) //update personal data 
     .delete(actors.delete_an_actor); //delete an actor
 
-  app.route(BASE_API_PATH + '/actors/:actorId/activate')
+  app.route(BASE_API_PATH + '/actors/ban')
     .put(actors.change_an_actor_status); //change activate status to a actor ; ban or unban
 };
