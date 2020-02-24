@@ -9,7 +9,6 @@ module.exports = function (app) {
 
   app.route(BASE_API_PATH + '/actors/:actorId')
     .get(actors.read_an_actor) //get actor information
-    .delete(actors.delete_an_actor); //delete an actor
 
   app.route(BASE_API_PATH + '/actors/ban')
     .put(actors.change_an_actor_status); //change activate status to a actor ; ban or unban

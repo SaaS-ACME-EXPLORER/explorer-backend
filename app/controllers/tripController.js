@@ -3,6 +3,7 @@
 
 const Trip = require('../models/Trip');
 const logger = require('../utils/logger');
+const actorUtils = require('../utils/actorUtils');
 
 //find all
 exports.find_all = async function (req, res) {
@@ -46,35 +47,42 @@ exports.find_one = async function (req, res) {
     }
 };
 
+// Create a trip only if the logged user is 
 exports.create_one = async function (req, res) {
-    try {
-        let trip = new Trip(req.body)
+    let trip = new Trip(req.body)
+    if (!actorUtils.isManager(req.body.actorId)) {
+        try {
+            trip.managedBy = req.body.actorId;
 
-        if (trip.endDate < trip.startDate) {
-            res.status(400);
-            res.json({ message: "Trip end date should be after start date" });
-            return
-        }
-
-        if (trip.cancelled) {
-            if (req.body.cancelledReason) {
-                trip.cancelledReason = req.body.cancelledReason ? req.body.cancelledReason : trip.cancelledReason;
-            } else {
+            if (trip.endDate < trip.startDate) {
                 res.status(400);
-                res.json({ message: "Trip cancellation error is required" });
+                res.json({ message: "Trip end date should be after start date" });
                 return
             }
-        }
 
-        let response = await trip.save();
-        res.status(201);
-        res.json(response);
-    } catch (error) {
-        if (error) {
-            res.status(400);
-            res.json({ message: error.message });
+            if (trip.cancelled) {
+                if (req.body.cancelledReason) {
+                    trip.cancelledReason = req.body.cancelledReason ? req.body.cancelledReason : trip.cancelledReason;
+                } else {
+                    res.status(400);
+                    res.json({ message: "Trip cancellation error is required" });
+                    return
+                }
+            }
 
+            let response = await trip.save();
+            res.status(201);
+            res.json(response);
+        } catch (error) {
+            if (error) {
+                res.status(400);
+                res.json({ message: error.message });
+
+            }
         }
+    } else {
+        res.status(403);
+        res.json({ message: "403 Forbidden request" });
     }
 };
 
