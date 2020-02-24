@@ -1,6 +1,7 @@
 'use strict';
 const generate = require('nanoid/generate');
 const mongoose = require('mongoose');
+const dateFormat = require('dateformat');
 const Schema = mongoose.Schema;
 
 const TripSchema = new Schema({
@@ -61,8 +62,14 @@ TripSchema.index({ title: 'text', description: 'text', ticker: 'text' });
 
 // Execute before each item.save() call
 TripSchema.pre('save', function (callback) {
+
+
   var newTrip = this;
-  newTrip.ticker = generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 6);
+  var date = dateFormat(new Date(), "yymmdd");
+
+  var generated_ticker = [date, generate('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)].join('-')
+  newTrip.ticker = generated_ticker;
+
   callback();
 });
 
