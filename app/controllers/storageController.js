@@ -13,6 +13,7 @@ const Stage = require('../models/Stage');
 
 
 exports.store_json_insertMany = function (req, res) {
+  logger.info('Inserting data, wait a momment');
   var mongooseModel, source = null;
   var response = '';
 
