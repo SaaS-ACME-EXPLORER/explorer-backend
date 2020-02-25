@@ -2,6 +2,8 @@
 /*---------------SPONSORSHIP----------------------*/
 
 const Sponsorship = require('../models/Sponsorship');
+const logger = require('../utils/logger');
+const mongoose = require('mongoose');
 
 exports.list_all_sponsorships = async (req, res) => {
     try {
@@ -29,34 +31,30 @@ exports.create_sponsorship = async (req, res) => {
         res.status(201);
         res.json(response);
     } catch (error) {
-        if (error.errors.name.kind == "required") {
-            res.status(400);
-            res.json({ message: "Bad Request" });
-        } else if (error.errors.name.kind == "unique") {
-            res.status(409);
-            res.json({ message: "Conflict" });
-        } else {
-            logger.error(error);
-            res.status(500);
-            res.json({ message: "Internal Error" });
-        }
+        res.status(400);
+        res.json({ message: "Bad Request" });
     }
 };
 
 exports.get_a_sponsorship = async (req, res) => {
     try {
-        let sponsorship = await Sponsorship.find({ sponsorId: req.params.sponsorship_id });
-
-        if (!sponsorship) {
-            logger.error(`ERROR: -GET /sponsorship/${req.params.sponsorship_id} - Not found sponsorship with id: ${req.params.sponsorship_id}`);
-            return res.status(404).send({
-                message: "Sponsorship not found with id " + req.params.sponsorship_id
-            });
+        if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
+            res.status(404);
+            res.json({ message: "Not Found" });
+            return
+        } else {
+            let sponsorship = await Sponsorship.findOne({ _id: req.params.sponsorship_id });
+            if (!sponsorship) {
+                logger.error(`ERROR: -GET /sponsorship/${req.params.sponsorship_id} - Not found sponsorship with id: ${req.params.sponsorship_id}`);
+                return res.status(404).send({
+                    message: "Sponsorship not found with id " + req.params.sponsorship_id
+                });
+            }
+            res.send(sponsorship);
+            return
         }
-        res.send(sponsorship);
-        return
-
     } catch (err) {
+        console.log(err)
         logger.error(`ERROR getting sponsorship ${req.params.sponsorship_id}`)
         return res.status(500).send({
             message: "Error retrieving sponsorship with id " + req.params.sponsorship_id
@@ -68,17 +66,24 @@ exports.pay_a_sponsorship = (req, res) => {
     res.status(200).send("OK");
 };
 
-exports.update_a_sponsorship = async(req, res) => {
+exports.update_a_sponsorship = async (req, res) => {
     try {
-        let sponsorship = await Sponsorship.findOneAndUpdate({ sponsorId: req.params.sponsorship_id }, req.body);
-        if (!trip) {
+        if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             res.status(404);
-            res.json({ message: "Sponsorship Not Found" });
+            res.json({ message: "Not Found" });
             return
         } else {
-            res.status(200);
-            res.json(sponsorship);
-            return
+            await Sponsorship.updateOne({ _id: req.params.sponsorship_id }, req.body);
+            let sponsorship = await Sponsorship.findOne({ _id: req.params.sponsorship_id }, req.body);
+            if (!sponsorship) {
+                res.status(404);
+                res.json({ message: "Sponsorship Not Found" });
+                return
+            } else {
+                res.status(200);
+                res.json(sponsorship);
+                return
+            }
         }
 
     } catch (error) {
@@ -93,17 +98,23 @@ exports.update_a_sponsorship = async(req, res) => {
 
 exports.delete_a_sponsorship = (req, res) => {
     try {
-        Sponsorship.deleteOne({ sponsorId: req.params.sponsorship_id }, function (err, sponsorship) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            else if (sponsorship.deletedCount==0) {
-                res.status(404).send("Not found");
-            }
-            else {
-                res.json({ message: 'Sponsorship successfully deleted' });
-            }
-        });
+        if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
+            res.status(404);
+            res.json({ message: "Not Found" });
+            return
+        } else {
+            Sponsorship.deleteOne({ _id: req.params.sponsorship_id }, function (err, sponsorship) {
+                if (err) {
+                    res.status(500).send(err);
+                }
+                else if (sponsorship.deletedCount == 0) {
+                    res.status(404).send("Not found");
+                }
+                else {
+                    res.json({ message: 'Sponsorship successfully deleted' });
+                }
+            });
+        }
     } catch (error) {
         logger.error(error);
         res.status(500);
