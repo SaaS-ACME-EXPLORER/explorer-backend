@@ -65,7 +65,7 @@ exports.create_an_actor = async function (req, res) {
         }
 
         if (authorized) {
-            new_actor.save(function (err, actor) {
+            new_actor.save(function (err, actor,{a:1}) {
                 if (err) {
                     res.status(400).send(err);
                 }
