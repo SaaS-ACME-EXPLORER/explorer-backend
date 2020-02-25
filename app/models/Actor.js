@@ -50,7 +50,24 @@ var ActorSchema = new Schema({
 
 ActorSchema.pre('save', function (callback) {
   var actor = this;
-  // Password changed so we need to hash it
+  if (actor.isNew) {
+    // Password changed so we need to hash it
+    bcrypt.genSalt(5, function (err, salt) {
+      if (err) return callback(err);
+
+      bcrypt.hash(actor.password, salt, function (err, hash) {
+        if (err) return callback(err);
+        actor.password = hash;
+        callback();
+      });
+    });
+  } else {
+    callback();
+  }
+});
+
+ActorSchema.pre('updateOne', function (callback) {
+  var actor = this;
   bcrypt.genSalt(5, function (err, salt) {
     if (err) return callback(err);
 
@@ -61,14 +78,5 @@ ActorSchema.pre('save', function (callback) {
     });
   });
 });
-
-ActorSchema.methods.verifyPassword = function (password, cb) {
-  bcrypt.compare(password, this.password, function (err, isMatch) {
-    console.log('verifying password in actorModel: ' + password);
-    if (err) return cb(err);
-    console.log('iMatch: ' + isMatch);
-    cb(null, isMatch);
-  });
-};
 
 module.exports = mongoose.model('Actor', ActorSchema);

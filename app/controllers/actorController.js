@@ -3,6 +3,7 @@
 
 const Actor = require('../models/Actor');
 const actorUtils = require('../utils/actorUtils');
+var bcrypt = require('bcrypt');
 
 exports.list_all_actors = async function (req, res) {
 
@@ -20,7 +21,7 @@ exports.list_all_actors = async function (req, res) {
         } else {
 
             if (role == "EXPLORER" || role == "SPONSOR") {
-                res.sendStatus(401);
+                res.sendStatus(403);
             } else if (role == "MANAGER") {
                 query = [{ 'role': "EXPLORER" }, { 'role': "SPONSOR" }];
             } else if (role == "ADMINISTRATOR") {
@@ -73,7 +74,7 @@ exports.create_an_actor = async function (req, res) {
                 }
             });
         } else {
-            res.sendStatus(401);
+            res.sendStatus(403);
         }
 
     } else {
@@ -101,7 +102,7 @@ exports.read_an_actor = async function (req, res) {
             if (authorized) {
                 res.json(actor);
             } else {
-                res.sendStatus(401);
+                res.sendStatus(403);
             }
         }
     });
@@ -122,29 +123,69 @@ exports.update_an_actor = function (req, res) {
             }
         });
     } else {
-        res.sendStatus(401);
+        res.sendStatus(403);
     }
 };
 
 exports.change_an_actor_status = async function (req, res) {
 
-    var roleBanner = await actorUtils.getRoleById(req.query.adminId);
-    var banned = req.query.adminId;
-    var actorId = req.query.actorId;
+    var roleBanner = await actorUtils.getRoleById(req.body.adminId);
+    var active = req.body.active;
+    var actorId = req.body.actorId;
 
-    if (req.query.active != undefined) {
-        statusActor = req.query.active;
-
-        Actor.findOneAndUpdate({ _id: req.params.actorId }, { $set: { "active": statusActor } }, { new: true }, function (err, actor) {
-            if (err) {
-                res.status(404).send(err);
-            }
-            else {
-                res.json(actor);
-            }
-        });
-
+    if (roleBanner == "ADMINISTRATOR") {
+        if (active === undefined) {
+            res.sendStatus(400);
+        } else {
+            Actor.findById(actorId, function (err, actor) {
+                if (err) {
+                    res.sendStatus(404);
+                } else {
+                    if (actor.role == "ADMINISTRATOR") {
+                        res.sendStatus(403);
+                    } else {
+                        actor.active = active;
+                        Actor.s
+                        actor.save(function (err, actor) {
+                            if (err) {
+                                res.sendStatus(500).send(err);
+                            } else {
+                                res.json(actor);
+                            }
+                        });
+                    }
+                }
+            });
+        }
     } else {
-        res.status(400).send(err);
+        res.sendStatus(403);
     }
+};
+
+exports.change_password = async function (req, res) {
+    var actorId = req.body.actorId;
+    var oldPass = req.body.oldPass;
+    var newPass = req.body.newPass;
+
+    if (actorId == undefined || oldPass == undefined || newPass == undefined) {
+        res.sendStatus(400);
+    } else {
+        Actor.findById(actorId, function (err, actor) {
+            if (err) {
+                res.sendStatus(404);
+            } else {
+                bcrypt.compare(oldPass, actor.password, function (err, isMatch) {
+                    if(isMatch){
+                        actor.password = newPass;
+                        Actor.updateOne({ _id: actor.id_ }, actor, function (err, actor) {
+                            res.sendStatus(200);
+                        });
+                    }else{
+                        res.sendStatus(401);
+                    }
+                });
+            }
+        })
+    }
+
 };
