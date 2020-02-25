@@ -65,7 +65,7 @@ exports.create_an_actor = async function (req, res) {
         }
 
         if (authorized) {
-            new_actor.save(function (err, actor,{a:1}) {
+            new_actor.save(function (err, actor) {
                 if (err) {
                     res.status(400).send(err);
                 }
@@ -175,13 +175,20 @@ exports.change_password = async function (req, res) {
                 res.sendStatus(404);
             } else {
                 bcrypt.compare(oldPass, actor.password, function (err, isMatch) {
-                    if(isMatch){
-                        actor.password = newPass;
-                        Actor.updateOne({ _id: actor.id_ }, actor, function (err, actor) {
-                            res.sendStatus(200);
+                    if (isMatch) {
+                        bcrypt.genSalt(5, function (err, salt) {
+                            if (err) return callback(err);
+
+                            bcrypt.hash(newPass, salt, function (err, hash) {
+                                if (err) return callback(err);
+                                actor.password = hash;
+                                Actor.updateOne({ _id: actor._id }, actor, function (err, actor) {
+                                    res.sendStatus(200);
+                                });
+                            });
                         });
-                    }else{
-                        res.sendStatus(401);
+                    } else {
+                        res.sendStatus(403);
                     }
                 });
             }
