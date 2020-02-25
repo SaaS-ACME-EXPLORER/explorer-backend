@@ -12,4 +12,7 @@ module.exports = function (app) {
 
   app.route(BASE_API_PATH + '/actors/ban')
     .put(actors.change_an_actor_status); //change activate status to a actor ; ban or unban
+
+  app.route(BASE_API_PATH + '/actors/password')
+    .put(actors.change_password); //change password
 };

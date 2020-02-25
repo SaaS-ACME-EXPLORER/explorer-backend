@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "4fa66851-c705-480d-b245-3efb003d0d64",
+		"name": "ACTORS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET ALL ACTORS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/actors?actorId=5e5153b8260e9d783d66ef49",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors"
+					],
+					"query": [
+						{
+							"key": "actorId",
+							"value": "5e5153b8260e9d783d66ef49"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET AN ACTOR",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/actors/5e52c9b8a603ef8d2551faf6?actorFinder=5e4c39a19ac37c5fc442f719",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors",
+						"5e52c9b8a603ef8d2551faf6"
+					],
+					"query": [
+						{
+							"key": "actorFinder",
+							"value": "5e4c39a19ac37c5fc442f719"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST ACTOR",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"actor\": {\n\t\"name\": \"AdminName\",\n\t\"surname\": \"AdminSurname\",\n\t\"email\": \"manager2@fakemail.com\",\n\t\"password\": \"mypa2ss1234\",\n\t\"phone\": \"+34612345670\",\n\t\"role\": \"MANAGER\",\n\t\"address\": \"myAddress\"\n\t},\n\t\"actorCreator\" : \"5e5153b8260e9d783d66ef49\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/actors",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT ITEM",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"updatedActor\": {\n\t\t\"id_\": \"5e4c39a19ac37c5fc442f719\",\n\t    \"preferredLanguage\": \"en\",\n\t    \"active\": true,\n\t    \"name\": \"AdminNames\",\n\t    \"surname\": \"AdminSurname\",\n\t    \"email\": \"adminas@fakemail.com\",\n\t    \"phone\": \"+34612345670\",\n\t    \"role\": \"ADMINISTRATOR\",\n\t    \"address\": \"myAddress\"\n    },\n    \"actorUpdater\": \"5e52c94da603ef8d2551faf4\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/actors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BAN/UNBAN AN ACTOR",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"actorId\": \"5e5159c6303282792bc37594\",\n\t\"adminId\": \"5e5159c6303282792bc37594\",\n\t\"active\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/actors/ban",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors",
+						"ban"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CHANGE PASSWORD",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"actorId\": \"5e4c3c01d717af5fda797ba3\",\n\t\"oldPass\": \"mypass12w4\",\n\t\"newPass\": \"mypass12w42\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/actors/password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"actors",
+						"password"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -3,24 +3,25 @@
 
 const Actor = require('../models/Actor');
 const actorUtils = require('../utils/actorUtils');
+var bcrypt = require('bcrypt');
 
 exports.list_all_actors = async function (req, res) {
 
     if (req.query.actorId) {
-        var actorId = req.query.actorId;
-        var role = await actorUtils.getRoleById(actorId);
+        let actorId = req.query.actorId;
+        let role = await actorUtils.getRoleById(actorId);
 
         let numperpages = parseInt(req.query['limit']) || 5;
         let page = parseInt(req.query['page']) || 1;
 
-        var query;
+        let query;
 
         if (role == undefined) {
             res.status(404);
         } else {
 
             if (role == "EXPLORER" || role == "SPONSOR") {
-                res.sendStatus(401);
+                res.sendStatus(403);
             } else if (role == "MANAGER") {
                 query = [{ 'role': "EXPLORER" }, { 'role': "SPONSOR" }];
             } else if (role == "ADMINISTRATOR") {
@@ -47,9 +48,9 @@ exports.list_all_actors = async function (req, res) {
 };
 
 exports.create_an_actor = async function (req, res) {
-    var new_actor = new Actor(req.body.actor);
-    var roleCreator = await actorUtils.getRoleById(req.body.actorCreator);
-    var authorized = true;
+    let new_actor = new Actor(req.body.actor);
+    let roleCreator = await actorUtils.getRoleById(req.body.actorCreator);
+    let authorized = true;
 
     if (new_actor.role != undefined) {
 
@@ -73,7 +74,7 @@ exports.create_an_actor = async function (req, res) {
                 }
             });
         } else {
-            res.sendStatus(401);
+            res.sendStatus(403);
         }
 
     } else {
@@ -83,14 +84,14 @@ exports.create_an_actor = async function (req, res) {
 };
 
 exports.read_an_actor = async function (req, res) {
-    var roleFinder = await actorUtils.getRoleById(req.query.actorFinder);
+    let roleFinder = await actorUtils.getRoleById(req.query.actorFinder);
 
     Actor.findById(req.params.actorId, function (err, actor) {
         if (err) {
             res.status(404).send(err);
         } else {
 
-            var authorized = false;
+            let authorized = false;
 
             if (roleFinder == "MANAGER" && (actor.role == "SPONSOR" || actor.role == "EXPLORER")) {
                 authorized = true;
@@ -101,7 +102,7 @@ exports.read_an_actor = async function (req, res) {
             if (authorized) {
                 res.json(actor);
             } else {
-                res.sendStatus(401);
+                res.sendStatus(403);
             }
         }
     });
@@ -109,9 +110,9 @@ exports.read_an_actor = async function (req, res) {
 
 exports.update_an_actor = function (req, res) {
 
-    var updatedActor = req.body.updatedActor;
+    let updatedActor = req.body.updatedActor;
 
-    var authorized = req.body.actorUpdater == updatedActor.id_;
+    let authorized = req.body.actorUpdater == updatedActor.id_;
 
     if (authorized) {
         Actor.findByIdAndUpdate(updatedActor.id_, updatedActor, function (err, actor) {
@@ -122,29 +123,76 @@ exports.update_an_actor = function (req, res) {
             }
         });
     } else {
-        res.sendStatus(401);
+        res.sendStatus(403);
     }
 };
 
 exports.change_an_actor_status = async function (req, res) {
 
-    var roleBanner = await actorUtils.getRoleById(req.query.adminId);
-    var banned = req.query.adminId;
-    var actorId = req.query.actorId;
+    let roleBanner = await actorUtils.getRoleById(req.body.adminId);
+    let active = req.body.active;
+    let actorId = req.body.actorId;
 
-    if (req.query.active != undefined) {
-        statusActor = req.query.active;
-
-        Actor.findOneAndUpdate({ _id: req.params.actorId }, { $set: { "active": statusActor } }, { new: true }, function (err, actor) {
-            if (err) {
-                res.status(404).send(err);
-            }
-            else {
-                res.json(actor);
-            }
-        });
-
+    if (roleBanner == "ADMINISTRATOR") {
+        if (active === undefined) {
+            res.sendStatus(400);
+        } else {
+            Actor.findById(actorId, function (err, actor) {
+                if (err) {
+                    res.sendStatus(404);
+                } else {
+                    if (actor.role == "ADMINISTRATOR") {
+                        res.sendStatus(403);
+                    } else {
+                        actor.active = active;
+                        Actor.s
+                        actor.save(function (err, actor) {
+                            if (err) {
+                                res.sendStatus(500).send(err);
+                            } else {
+                                res.json(actor);
+                            }
+                        });
+                    }
+                }
+            });
+        }
     } else {
-        res.status(400).send(err);
+        res.sendStatus(403);
     }
+};
+
+exports.change_password = async function (req, res) {
+    let actorId = req.body.actorId;
+    let oldPass = req.body.oldPass;
+    let newPass = req.body.newPass;
+
+    if (actorId == undefined || oldPass == undefined || newPass == undefined) {
+        res.sendStatus(400);
+    } else {
+        Actor.findById(actorId, function (err, actor) {
+            if (err) {
+                res.sendStatus(404);
+            } else {
+                bcrypt.compare(oldPass, actor.password, function (err, isMatch) {
+                    if (isMatch) {
+                        bcrypt.genSalt(5, function (err, salt) {
+                            if (err) return callback(err);
+
+                            bcrypt.hash(newPass, salt, function (err, hash) {
+                                if (err) return callback(err);
+                                actor.password = hash;
+                                Actor.updateOne({ _id: actor._id }, actor, function (err, actor) {
+                                    res.sendStatus(200);
+                                });
+                            });
+                        });
+                    } else {
+                        res.sendStatus(403);
+                    }
+                });
+            }
+        })
+    }
+
 };
