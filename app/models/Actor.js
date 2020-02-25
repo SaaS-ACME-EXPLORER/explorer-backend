@@ -49,7 +49,7 @@ var ActorSchema = new Schema({
 }, { strict: false });
 
 ActorSchema.pre('save', function (callback) {
-  var actor = this;
+  let actor = this;
   if (actor.isNew) {
     // Password changed so we need to hash it
     bcrypt.genSalt(5, function (err, salt) {
@@ -67,7 +67,7 @@ ActorSchema.pre('save', function (callback) {
 });
 
 ActorSchema.pre('updateOne', function (callback) {
-  var actor = this;
+  let actor = this;
   bcrypt.genSalt(5, function (err, salt) {
     if (err) return callback(err);
 

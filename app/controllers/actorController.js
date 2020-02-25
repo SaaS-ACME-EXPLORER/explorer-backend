@@ -8,13 +8,13 @@ var bcrypt = require('bcrypt');
 exports.list_all_actors = async function (req, res) {
 
     if (req.query.actorId) {
-        var actorId = req.query.actorId;
-        var role = await actorUtils.getRoleById(actorId);
+        let actorId = req.query.actorId;
+        let role = await actorUtils.getRoleById(actorId);
 
         let numperpages = parseInt(req.query['limit']) || 5;
         let page = parseInt(req.query['page']) || 1;
 
-        var query;
+        let query;
 
         if (role == undefined) {
             res.status(404);
@@ -48,9 +48,9 @@ exports.list_all_actors = async function (req, res) {
 };
 
 exports.create_an_actor = async function (req, res) {
-    var new_actor = new Actor(req.body.actor);
-    var roleCreator = await actorUtils.getRoleById(req.body.actorCreator);
-    var authorized = true;
+    let new_actor = new Actor(req.body.actor);
+    let roleCreator = await actorUtils.getRoleById(req.body.actorCreator);
+    let authorized = true;
 
     if (new_actor.role != undefined) {
 
@@ -84,14 +84,14 @@ exports.create_an_actor = async function (req, res) {
 };
 
 exports.read_an_actor = async function (req, res) {
-    var roleFinder = await actorUtils.getRoleById(req.query.actorFinder);
+    let roleFinder = await actorUtils.getRoleById(req.query.actorFinder);
 
     Actor.findById(req.params.actorId, function (err, actor) {
         if (err) {
             res.status(404).send(err);
         } else {
 
-            var authorized = false;
+            let authorized = false;
 
             if (roleFinder == "MANAGER" && (actor.role == "SPONSOR" || actor.role == "EXPLORER")) {
                 authorized = true;
@@ -110,9 +110,9 @@ exports.read_an_actor = async function (req, res) {
 
 exports.update_an_actor = function (req, res) {
 
-    var updatedActor = req.body.updatedActor;
+    let updatedActor = req.body.updatedActor;
 
-    var authorized = req.body.actorUpdater == updatedActor.id_;
+    let authorized = req.body.actorUpdater == updatedActor.id_;
 
     if (authorized) {
         Actor.findByIdAndUpdate(updatedActor.id_, updatedActor, function (err, actor) {
@@ -129,9 +129,9 @@ exports.update_an_actor = function (req, res) {
 
 exports.change_an_actor_status = async function (req, res) {
 
-    var roleBanner = await actorUtils.getRoleById(req.body.adminId);
-    var active = req.body.active;
-    var actorId = req.body.actorId;
+    let roleBanner = await actorUtils.getRoleById(req.body.adminId);
+    let active = req.body.active;
+    let actorId = req.body.actorId;
 
     if (roleBanner == "ADMINISTRATOR") {
         if (active === undefined) {
@@ -163,9 +163,9 @@ exports.change_an_actor_status = async function (req, res) {
 };
 
 exports.change_password = async function (req, res) {
-    var actorId = req.body.actorId;
-    var oldPass = req.body.oldPass;
-    var newPass = req.body.newPass;
+    let actorId = req.body.actorId;
+    let oldPass = req.body.oldPass;
+    let newPass = req.body.newPass;
 
     if (actorId == undefined || oldPass == undefined || newPass == undefined) {
         res.sendStatus(400);
