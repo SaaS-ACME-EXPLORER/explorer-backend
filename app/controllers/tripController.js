@@ -3,6 +3,7 @@
 
 const Trip = require('../models/Trip');
 const logger = require('../utils/logger');
+const actorUtils = require('../utils/actorUtils');
 
 //find all
 exports.find_all = async function (req, res) {
@@ -46,52 +47,90 @@ exports.find_one = async function (req, res) {
     }
 };
 
+// Create a trip only if the logged user is 
 exports.create_one = async function (req, res) {
     let trip = new Trip(req.body)
-    try {
-        let response = await trip.save();
-        res.status(201);
-        res.json(response);
-    } catch (error) {
-        if (error) {
-            res.status(400);
-            res.json({ message: error.message });
-        
+    if (!actorUtils.isManager(req.body.actorId)) {
+        try {
+            trip.managedBy = req.body.actorId;
+
+            if (trip.endDate < trip.startDate) {
+                res.status(400);
+                res.json({ message: "Trip end date should be after start date" });
+                return
+            }
+
+            if (trip.cancelled) {
+                if (req.body.cancelledReason) {
+                    trip.cancelledReason = req.body.cancelledReason ? req.body.cancelledReason : trip.cancelledReason;
+                } else {
+                    res.status(400);
+                    res.json({ message: "Trip cancellation error is required" });
+                    return
+                }
+            }
+
+            let response = await trip.save();
+            res.status(201);
+            res.json(response);
+        } catch (error) {
+            if (error) {
+                res.status(400);
+                res.json({ message: error.message });
+
+            }
         }
-        // if (error.errors.name.kind == "required") {
-        //     res.status(400);
-        //     res.json({ message: "Bad Request" });
-        // } else if (error.errors.name.kind == "unique") {
-        //     res.status(409);
-        //     res.json({ message: "Conflict" });
-        // } else {
-        //     logger.error(error);
-        //     res.status(500);
-        //     res.json({ message: "Internal Error" });
-        // }
+    } else {
+        res.status(403);
+        res.json({ message: "403 Forbidden request" });
     }
 };
 
 
 exports.update_one = async function (req, res) {
-    // if (!checkBody(req.body)) {
-    //     res.status(400);
-    //     res.json({ message: "Bad Request" });
-    //     return
-    // }
     try {
 
-        let trip = await Trip.findOneAndUpdate({ ticker: req.params.trip_id }, req.body, {
-            new: true
-        });
-
+        let trip = await Trip.findOne({ ticker: req.params.trip_id })
         if (!trip) {
             res.status(404);
             res.json({ message: "Trip Not Found" });
             return
+
+        } else if (trip.public) {
+            res.status(500);
+            res.json({ message: "Trip already published" });
+            return
+
         } else {
+            //   ticker, created and managedBy not editable
+            trip.title = req.body.title ? req.body.title : trip.title;
+            trip.description = req.body.description ? req.body.description : trip.description;
+            trip.price = req.body.price ? req.body.price : trip.price;
+            trip.requeriments = req.body.requeriments ? req.body.requeriments : trip.requeriments;
+            trip.startDate = req.body.startDate ? req.body.startDate : trip.startDate;
+            trip.endDate = req.body.endDate ? req.body.endDate : trip.endDate;
+            trip.cancelled = req.body.cancelled ? req.body.cancelled : trip.cancelled;
+            if (trip.cancelled) {
+                if (req.body.cancelledReason) {
+                    trip.cancelledReason = req.body.cancelledReason ? req.body.cancelledReason : trip.cancelledReason;
+                } else {
+                    res.status(400);
+                    res.json({ message: "Trip cancellation error is required" });
+                    return
+                }
+            }
+            trip.public = req.body.public ? req.body.public : trip.public;
+            trip.img = req.body.img ? req.body.img : trip.img;
+
+            if (trip.endDate < trip.startDate) {
+                res.status(400);
+                res.json({ message: "Trip end date should be after start date" });
+                return
+            }
+
+            let response = await trip.save();
             res.status(200);
-            res.json(trip);
+            res.json(response);
             return
         }
 

@@ -65,11 +65,13 @@ TripSchema.pre('save', function (callback) {
 
 
   var newTrip = this;
-  var date = dateFormat(new Date(), "yymmdd");
 
-  var generated_ticker = [date, generate('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)].join('-')
-  newTrip.ticker = generated_ticker;
-
+  if(!newTrip.ticker){
+    var date = dateFormat(new Date(), "yymmdd");
+    var generated_ticker = [date, generate('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)].join('-')
+    newTrip.ticker = generated_ticker;
+  }
+  
   callback();
 });
 

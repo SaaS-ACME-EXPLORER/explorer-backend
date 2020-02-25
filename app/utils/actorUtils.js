@@ -1,33 +1,70 @@
 const Actor = require('../models/Actor');
+const mongoose = require('mongoose');
+
 
 exports.getRoleById = async function getRoleById(actorId) {
-
-    let actor = await Actor.findById(actorId);
-    return actor.role;
+    if (!mongoose.Types.ObjectId.isValid(actorId)) {
+        return null;
+    } else {
+        let actor = await Actor.findById(actorId);
+        if (actor) {
+            return actor.role;
+        } else {
+            return null;
+        }
+    }
 }
 
 exports.isAdministrator = async function isAdministrator(actorId) {
-
-    let actor = await Actor.findById(actorId);
-    return "ADMINISTRATOR" == actor.role;
+    if (!mongoose.Types.ObjectId.isValid(actorId)) {
+        return false;
+    } else {
+        let actor = await Actor.findById(actorId);
+        if (actor) {
+            return "ADMINISTRATOR" == actor.role;
+        } else {
+            return false;
+        }
+    }
 }
 
-exports.isSponsor= async function isSponsor(actorId) {
-
-    let actor = await Actor.findById(actorId);
-    return "SPONSOR" == actor.role;
+exports.isSponsor = async function isSponsor(actorId) {
+    if (!mongoose.Types.ObjectId.isValid(actorId)) {
+        return false;
+    } else {
+        let actor = await Actor.findById(actorId);
+        if (actor) {
+            return "SPONSOR" == actor.role;
+        } else {
+            return false;
+        }
+    }
 }
 
 exports.isExplorer = async function isExplorer(actorId) {
-
-    let actor = await Actor.findById(actorId);
-    return "EXPLORER" == actor.role;
+    if (!mongoose.Types.ObjectId.isValid(actorId)) {
+        return false;
+    } else {
+        let actor = await Actor.findById(actorId);
+        if (actor) {
+            return "EXPLORER" == actor.role;
+        } else {
+            return false;
+        }
+    }
 }
 
 exports.isManager = async function isManager(actorId) {
-
-    let actor = await Actor.findById(actorId);
-    return "MANAGER" == actor.role;
+    if (!mongoose.Types.ObjectId.isValid(actorId)) {
+        return false;
+    } else {
+        let actor = await Actor.findById(actorId);
+        if (actor) {
+            return "MANAGER" == actor.role;
+        } else {
+            return false;
+        }
+    }
 }
 
 exports.copyProperties = function copyProperties(source_obj, new_obj) {

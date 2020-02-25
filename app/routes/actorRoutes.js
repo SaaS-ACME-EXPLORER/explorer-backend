@@ -8,7 +8,7 @@ module.exports = function (app) {
     .put(actors.update_an_actor); //update personal data 
 
   app.route(BASE_API_PATH + '/actors/:actorId')
-    .get(actors.read_an_actor); //get actor information
+    .get(actors.read_an_actor) //get actor information
 
   app.route(BASE_API_PATH + '/actors/ban')
     .put(actors.change_an_actor_status); //change activate status to a actor ; ban or unban
