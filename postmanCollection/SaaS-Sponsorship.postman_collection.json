@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "acf7597c-acf7-40b8-a9a4-403b6b5a8cbc",
+		"name": "SaaS-Sponsorship",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Sponsorship",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"sponsorId\":\"111s11\",\n\t\"tripId\":\"222222\",\n\t\"link\": \"http://google.es\"\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/sponsorships",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"sponsorships"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Sponsorships",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"sponsorId\":\"11111\",\n\t\"tripId\":\"222222\",\n\t\"link\": \"http://google.es\"\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/sponsorships",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"sponsorships"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET a sponsorship",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"sponsorId\":\"11111\",\n\t\"tripId\":\"222222\",\n\t\"link\": \"http://google.es\"\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/sponsorships/5e556cc22b10de6ea9f1a480",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"sponsorships",
+						"5e556cc22b10de6ea9f1a480"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE a sponsorship",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"sponsorId\":\"11111\",\n\t\"tripId\":\"222222\",\n\t\"link\": \"http://google.es\"\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/sponsorships/11111",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"sponsorships",
+						"11111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a sponsorship",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"sponsorId\":\"111sssss11\",\n\t\"tripId\":\"222222\",\n\t\"link\": \"http://google.es\"\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/sponsorships/5e55646c71480f6c83c67f1e",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"sponsorships",
+						"5e55646c71480f6c83c67f1e"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

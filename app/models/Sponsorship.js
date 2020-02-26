@@ -5,11 +5,11 @@ var Schema = mongoose.Schema;
 var SponsorshipSchema = new Schema({
   sponsorId: {
     type: String,
-    required: 'Sponsor ID must be provided'
+    required: true
   },
   tripId: {
     type: String,
-    required: 'Trip ID must be provided'
+    required: true
   },
   paid: {
     type: Boolean,
@@ -24,6 +24,6 @@ var SponsorshipSchema = new Schema({
     type: Date,
     default: Date.now
   }
-}, { strict: false });
+}, { strict: true });
 
 module.exports = mongoose.model('Sponsorship', SponsorshipSchema);

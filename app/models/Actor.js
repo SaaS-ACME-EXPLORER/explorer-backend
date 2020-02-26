@@ -65,17 +65,4 @@ ActorSchema.pre('save', function (callback) {
   }
 });
 
-ActorSchema.pre('updateOne', function (callback) {
-  let actor = this;
-  bcrypt.genSalt(5, function (err, salt) {
-    if (err) return callback(err);
-
-    bcrypt.hash(actor.password, salt, function (err, hash) {
-      if (err) return callback(err);
-      actor.password = hash;
-      callback();
-    });
-  });
-});
-
 module.exports = mongoose.model('Actor', ActorSchema);
