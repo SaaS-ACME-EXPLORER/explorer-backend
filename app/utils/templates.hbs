@@ -5,13 +5,22 @@
           "ticker": "{{@guid}}",
           "title": "{{lorem 5}}",
           "description": "{{lorem 15}}",
-          "price": "{{int 0 1000}}",
           "requeriments": "{{lorem 15}}",
           "startDate": "{{date '2010' '2020'}}",
           "endDate": "{{date '2010' '2020'}}",
           "cancelled": {{boolean}},
           "public": {{boolean}},
-          "managedBy": "{{@guid}}"
+          "managedBy": "{{@guid}}",
+          "stages": [
+                  {{#repeat 4}}
+                    {
+                      "title": "{{city}} ({{country}}) with {{company}}",
+                      "description": "{{lorem 15}}",
+                      "price": "{{int 0 1000}}",
+                      "date": "{{date '2020-01-01' '2021-12-31'}}"
+                    }
+                  {{/repeat}}
+                  ]
         }
     {{/repeat}}
   ],
@@ -43,15 +52,6 @@
                       "{{lorem 15}}"
                       {{/repeat}}
                     ]
-        }
-    {{/repeat}}
-  ],
-  "Stage": [
-      {{#repeat 20000}}
-        {
-          "title": "{{city}} ({{country}} with {{company}}",
-          "description": "{{lorem 15}}",
-          "price": "{{int 0 1000}}"
         }
     {{/repeat}}
   ],

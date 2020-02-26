@@ -8,19 +8,17 @@ const Application = require('../models/Application');
 const Finder = require('../models/Finder');
 const Sponsorship = require('../models/Sponsorship');
 const Actor = require('../models/Actor');
-const Stage = require('../models/Stage');
 
 
 
-exports.store_json_insertMany = function (req, res) {
-  logger.info('Inserting data, wait a momment');
-  var mongooseModel, source = null;
-  var response = '';
+exports.store_json_insertMany = async function (req, res) {
+  logger.info('Parsing data, wait a momment');
+  let response = '';
 
-  var fs = require('fs');
-  var dummyjson = require('dummy-json');
+  const fs = require('fs');
+  const dummyjson = require('dummy-json');
 
-  var myHelpers = {
+  const myHelpers = {
     language: function () {
       return dummyjson.utils.randomArrayItem(['en', 'es']);
     },
@@ -44,8 +42,8 @@ exports.store_json_insertMany = function (req, res) {
   };
 
   // version con json separado por modelo
-  var templates = fs.readFileSync(BASE_DIR + '\\app\\utils\\templates.hbs', { encoding: 'utf8' });
-  var parsedTemplate = JSON.parse(dummyjson.parse(templates, { helpers: myHelpers }));
+  let templates = fs.readFileSync(BASE_DIR + '\\app\\utils\\templates.hbs', { encoding: 'utf8' });
+  let parsedTemplate = JSON.parse(dummyjson.parse(templates, { helpers: myHelpers }));
 
   // intento de sincronizacion, todo dentro del mismo objecto
   // var templates = fs.readFileSync(BASE_DIR + '\\app\\utils\\templates2.hbs', { encoding: 'utf8' });
@@ -55,33 +53,40 @@ exports.store_json_insertMany = function (req, res) {
 
 
   if (parsedTemplate) {
+    logger.info('Data parsed OK');
 
-    Object.keys(parsedTemplate).forEach(function (key, index) {
+    console.log('Start')
 
-      mongooseModel = key;
-      source = parsedTemplate[key];
+    for (const key in parsedTemplate) {
+      let mongooseModel = key;
+      let source = parsedTemplate[key];
       var collectionModel = mongoose.model(mongooseModel);
 
-      console.log('Inserting ' + source.length + ' documents into the Model ' + mongooseModel);
-      collectionModel.insertMany(source, function (err, result) {
-        if (err) {
-          console.log(err);
-          res.send(err);
-        } else {
-          res = 'All documents stored in the ' + mongooseModel;
-          console.log(res);
-          response += res;
-        }
-      });
-    });
+      logger.info('Inserting ' + source.length + ' documents into the Model ' + mongooseModel);
+      _insert(collectionModel, source, res);
+    }
+    console.log('End')
   }
   else {
     response += 'Malformed template.';
-    console.log(response);
+    logger.info(response);
   }
   res.send(response);
 
 };
+
+const _insert = async (collectionModel, source, res) => {
+  await collectionModel.insertMany(source, (err, result) => {
+    if (err) {
+      logger.error(err);
+      res.send(err);
+      return;
+    } else {
+      res = 'All documents stored in the ' + mongooseModel;
+      logger.info(res);
+    }
+  });
+}
 
 exports.store_json_fs = function (req, res) {
 
