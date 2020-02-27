@@ -1,9 +1,21 @@
 'use strict';
 /*---------------TRIP----------------------*/
-
+const Trips = require('../models/Trips');
 //const Trip = require('../models/Trip');
 
 exports.by_managers = (req, res) => {
+    // db.trips.aggregate([
+    //     {
+    //        $group: { 
+    //            _id: {managedBy : "$managedBy" }, 
+    //            total: { 
+    //                $sum: 1 
+    //            } 
+    //        }
+    //    }
+    //    ])
+       
+       
     res.status(200).send("OK");
 };
 
