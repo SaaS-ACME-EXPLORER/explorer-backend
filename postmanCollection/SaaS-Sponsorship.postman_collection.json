@@ -66,7 +66,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/v1/sponsorships",
+					"raw": "localhost:3000/api/v1/sponsorships?sponsorId=111s11&paid=true",
 					"host": [
 						"localhost"
 					],
@@ -75,6 +75,16 @@
 						"api",
 						"v1",
 						"sponsorships"
+					],
+					"query": [
+						{
+							"key": "sponsorId",
+							"value": "111s11"
+						},
+						{
+							"key": "paid",
+							"value": "true"
+						}
 					]
 				}
 			},
@@ -105,7 +115,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/v1/sponsorships/5e556cc22b10de6ea9f1a480",
+					"raw": "localhost:3000/api/v1/sponsorships/5e5702d3bba2fb4f1bd5067e?sponsorId=111s11",
 					"host": [
 						"localhost"
 					],
@@ -114,7 +124,13 @@
 						"api",
 						"v1",
 						"sponsorships",
-						"5e556cc22b10de6ea9f1a480"
+						"5e5702d3bba2fb4f1bd5067e"
+					],
+					"query": [
+						{
+							"key": "sponsorId",
+							"value": "111s11"
+						}
 					]
 				}
 			},
@@ -142,7 +158,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/v1/sponsorships/11111",
+					"raw": "localhost:3000/api/v1/sponsorships/5e5702d3bba2fb4f1bd5067e?sponsorId=111s11",
 					"host": [
 						"localhost"
 					],
@@ -151,7 +167,13 @@
 						"api",
 						"v1",
 						"sponsorships",
-						"11111"
+						"5e5702d3bba2fb4f1bd5067e"
+					],
+					"query": [
+						{
+							"key": "sponsorId",
+							"value": "111s11"
+						}
 					]
 				}
 			},
@@ -171,7 +193,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"sponsorId\":\"111sssss11\",\n\t\"tripId\":\"222222\",\n\t\"link\": \"http://google.es\"\n\t\n}",
+					"raw": "{\n\t\"tripId\":\"22sss2222\",\n\t\"link\": \"http://google.es\"\n\t\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -179,7 +201,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/v1/sponsorships/5e55646c71480f6c83c67f1e",
+					"raw": "localhost:3000/api/v1/sponsorships/5e5702d3bba2fb4f1bd5067e?sponsorId=111s11",
 					"host": [
 						"localhost"
 					],
@@ -188,7 +210,57 @@
 						"api",
 						"v1",
 						"sponsorships",
-						"5e55646c71480f6c83c67f1e"
+						"5e5702d3bba2fb4f1bd5067e"
+					],
+					"query": [
+						{
+							"key": "sponsorId",
+							"value": "111s11"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pay a sponsorship",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/sponsorships/5e570ea8d9194c6843a891cc/pay?sponsorId=111s11",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"sponsorships",
+						"5e570ea8d9194c6843a891cc",
+						"pay"
+					],
+					"query": [
+						{
+							"key": "sponsorId",
+							"value": "111s11"
+						}
 					]
 				}
 			},
