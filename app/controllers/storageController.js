@@ -63,7 +63,7 @@ exports.store_json_insertMany = async function (req, res) {
       var collectionModel = mongoose.model(mongooseModel);
 
       logger.info('Inserting ' + source.length + ' documents into the Model ' + mongooseModel);
-      _insert(collectionModel, source, res);
+      _insert(collectionModel, source, res,mongooseModel);
     }
     console.log('End')
   }
@@ -75,7 +75,7 @@ exports.store_json_insertMany = async function (req, res) {
 
 };
 
-const _insert = async (collectionModel, source, res) => {
+const _insert = async (collectionModel, source, res, mongooseModel) => {
   await collectionModel.insertMany(source, (err, result) => {
     if (err) {
       logger.error(err);
