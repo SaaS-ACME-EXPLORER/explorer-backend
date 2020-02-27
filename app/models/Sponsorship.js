@@ -29,5 +29,6 @@ var SponsorshipSchema = new Schema({
 
 
 SponsorshipSchema.index({ sponsorId: 1, tripId: 1});
+SponsorshipSchema.index({ sponsorId: 1});
 
 module.exports = mongoose.model('Sponsorship', SponsorshipSchema);
