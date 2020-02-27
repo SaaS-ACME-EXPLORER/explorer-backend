@@ -5,19 +5,28 @@ const Sponsorship = require('../models/Sponsorship');
 const logger = require('../utils/logger');
 const mongoose = require('mongoose');
 
+let checkSponsorId = (req, res) => {
+    if (!req.query['sponsorId']) {
+        res.status(400);
+        res.json({ message: "Bad Request" });
+    }
+}
+
 exports.list_all_sponsorships = async (req, res) => {
     try {
+        checkSponsorId(req, res)
+        let sponsorId = req.query['sponsorId']
+        let paid = req.query['paid'] || true
         let numperpages = parseInt(req.query['limit']) || 5;
         let page = parseInt(req.query['page']) || 1;
-        let numTrips = await Sponsorship.count();
-        let sponsorships = await Sponsorship.find()
+        let sponsorships = await Sponsorship.find({ sponsorId: sponsorId, paid: paid })
             .skip((numperpages * page) - numperpages)
             .limit(numperpages);
 
-        res.send({ sponsorships: sponsorships, totalPages: Math.ceil(numTrips / numperpages) });
+        res.send(sponsorships);
 
     } catch (err) {
-        logger.error("ERROR getting sponsorshipsf, Some error occurred while retrieving sponsorships")
+        logger.error("ERROR getting sponsorships, Some error occurred while retrieving sponsorships")
         res.status(500).send({
             message: err.message || "Some error occurred while retrieving sponsorships."
         });
@@ -31,6 +40,7 @@ exports.create_sponsorship = async (req, res) => {
         res.status(201);
         res.json(response);
     } catch (error) {
+        logger.error("ERROR getting sponsorship, Some error occurred while retrieving sponsorships")
         res.status(400);
         res.json({ message: "Bad Request" });
     }
@@ -38,12 +48,14 @@ exports.create_sponsorship = async (req, res) => {
 
 exports.get_a_sponsorship = async (req, res) => {
     try {
+        checkSponsorId(req, res)
+        let sponsorId = req.query['sponsorId']
         if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             res.status(404);
-            res.json({ message: "Not Found" });
+            res.json({ message: "Sponsorship not found with id " + req.params.sponsorship_id });
             return
         } else {
-            let sponsorship = await Sponsorship.findOne({ _id: req.params.sponsorship_id });
+            let sponsorship = await Sponsorship.findOne({ _id: req.params.sponsorship_id, sponsorId: sponsorId, paid: true });
             if (!sponsorship) {
                 logger.error(`ERROR: -GET /sponsorship/${req.params.sponsorship_id} - Not found sponsorship with id: ${req.params.sponsorship_id}`);
                 return res.status(404).send({
@@ -62,19 +74,50 @@ exports.get_a_sponsorship = async (req, res) => {
     }
 };
 
-exports.pay_a_sponsorship = (req, res) => {
-    res.status(200).send("OK");
+exports.pay_a_sponsorship = async (req, res) => {
+    try {
+        checkSponsorId(req, res)
+        let sponsorId = req.query['sponsorId']
+        if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
+            return res.status(404).send({
+                message: "Sponsorship not found with id " + req.params.sponsorship_id
+            });
+        } else {
+            let confirmation = await Sponsorship.updateOne({ _id: req.params.sponsorship_id, sponsorId: sponsorId }, { paid: true });
+            if (confirmation["n"] == 0) {
+                return res.status(404).send({
+                    message: "Sponsorship not found with id " + req.params.sponsorship_id
+                });
+            }
+            if (confirmation["nModified"] == 0) {
+                res.status(304);
+                res.json({ message: "Sponsorship has already been paid" });
+                return
+            } else {
+                res.status(200);
+                res.json(`Sponsorship ${req.params.sponsorship_id} has been paid`);
+                return
+            }
+        }
+    } catch (error) {
+        logger.error(error);
+        res.status(500);
+        res.json({ message: "Internal Error" });
+        return
+    }
 };
 
 exports.update_a_sponsorship = async (req, res) => {
     try {
+        checkSponsorId(req, res)
+        let sponsorId = req.query['sponsorId']
         if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             res.status(404);
             res.json({ message: "Not Found" });
             return
         } else {
-            await Sponsorship.updateOne({ _id: req.params.sponsorship_id }, req.body);
-            let sponsorship = await Sponsorship.findOne({ _id: req.params.sponsorship_id }, req.body);
+            await Sponsorship.updateOne({ _id: req.params.sponsorship_id, sponsorId: sponsorId }, req.body);
+            let sponsorship = await Sponsorship.findOne({ _id: req.params.sponsorship_id, sponsorId: sponsorId }, req.body);
             if (!sponsorship) {
                 res.status(404);
                 res.json({ message: "Sponsorship Not Found" });
@@ -98,12 +141,14 @@ exports.update_a_sponsorship = async (req, res) => {
 
 exports.delete_a_sponsorship = (req, res) => {
     try {
+        checkSponsorId(req, res)
+        let sponsorId = req.query['sponsorId']
         if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             res.status(404);
             res.json({ message: "Not Found" });
             return
         } else {
-            Sponsorship.deleteOne({ _id: req.params.sponsorship_id }, function (err, sponsorship) {
+            Sponsorship.deleteOne({ _id: req.params.sponsorship_id, sponsorId: sponsorId }, function (err, sponsorship) {
                 if (err) {
                     res.status(500).send(err);
                 }
@@ -111,7 +156,7 @@ exports.delete_a_sponsorship = (req, res) => {
                     res.status(404).send("Not found");
                 }
                 else {
-                    res.json({ message: 'Sponsorship successfully deleted' });
+                    res.json({ message: `Sponsorship ${req.params.sponsorship_id} successfully deleted` });
                 }
             });
         }
