@@ -49,7 +49,7 @@ exports.list_all_actors = async function (req, res) {
 
 exports.create_an_actor = async function (req, res) {
     let new_actor = new Actor(req.body.actor);
-    let roleCreator = await actorUtils.getRoleById(req.body.actorCreator);
+    let roleCreator = await actorUtils.getRoleById(req.body.actorId);
     let authorized = true;
 
     if (new_actor.role != undefined) {
@@ -84,7 +84,7 @@ exports.create_an_actor = async function (req, res) {
 };
 
 exports.read_an_actor = async function (req, res) {
-    let roleFinder = await actorUtils.getRoleById(req.query.actorFinder);
+    let roleFinder = await actorUtils.getRoleById(req.query.actorId);
 
     Actor.findById(req.params.actorId, function (err, actor) {
         if (err) {
@@ -112,7 +112,7 @@ exports.update_an_actor = function (req, res) {
 
     let updatedActor = req.body.updatedActor;
 
-    let authorized = req.body.actorUpdater == updatedActor.id_;
+    let authorized = req.body.actorId == updatedActor.id_;
 
     if (authorized) {
         Actor.findByIdAndUpdate(updatedActor.id_, updatedActor, function (err, actor) {

@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 var ResourcesSchema = new Schema({
   name: {
     type: String,
-    required: 'Name must be provided'
+    required: 'Name must be provided',
+    unique: true
   },
   value: {
     type: String,
@@ -18,5 +19,3 @@ var ResourcesSchema = new Schema({
 }, { strict: false });
 
 module.exports = mongoose.model('Resource', ResourcesSchema);
-
-//FALTAN LAS IMAGENES
