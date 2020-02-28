@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "97c9bb55-a153-4964-b1be-51e235148d7b",
+		"name": "RESOURCES",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST RESOURCE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"resource\":{\n\t\t\"name\":\"aa1\",\n\t\t\"value\":\"1231\",\n\t\t\"description\":\"Descripcion de aa1\"\n\t},\n\t\"actorId\":\"5e5153b8260e9d783d66ef49\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/resources",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ALL RESOURCES",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/resources",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET RESOURCE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/resources/aa1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"resources",
+						"aa1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT RESOURCES",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"resource\":{\n\t\t\"_id\": \"5e5902d8a0555bbb74f10874\",\n        \"name\": \"aa1\",\n        \"value\": \"1234567\",\n        \"description\": \"Descripcion de aa1 - new\"\n    \n\t},\n\t\"actorId\": \"5e5153b8260e9d783d66ef49\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/resources",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"resources"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE RESOURCE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/resources/aa1?actorId=5e5153b8260e9d783d66ef49",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"resources",
+						"aa1"
+					],
+					"query": [
+						{
+							"key": "actorId",
+							"value": "5e5153b8260e9d783d66ef49"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
