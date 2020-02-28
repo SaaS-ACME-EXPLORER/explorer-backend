@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "4c81f6a4-0e3e-463f-9fef-b3ce7859a753",
+		"name": "ACME-EXPLORER-APPLICATIONS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST /APPLICATIONS",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"tripId\": \"nfwHzt\",\n\t\"explorerId\": \"5e52a86f47543c53cca08f8e\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/applications",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /APPLICATIONS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/applications?actorId=5e52a86f47543c53cca08f8e",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications"
+					],
+					"query": [
+						{
+							"key": "actorId",
+							"value": "5e52a86f47543c53cca08f8e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /APPLICATIONS/{ID}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/applications/5e57e3c86ddd47147d18046e?actorId=5e52a86f47543c53cca08f8e",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"5e57e3c86ddd47147d18046e"
+					],
+					"query": [
+						{
+							"key": "actorId",
+							"value": "5e52a86f47543c53cca08f8e"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /APPLICATIONS/{ID}/PAY",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"paid\": true, \n\t\"actorId\": \"5e52a86f47543c53cca08f8e\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/applications/5e542ee6ea048618d1831422/pay",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"5e542ee6ea048618d1831422",
+						"pay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /APPLICATIONS/{ID}/STATUS",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"status\": \"REJECTED\",\n\t\"statusReason\": \"abc\",\n\t\"actorId\": \"5e52a32897ec734d3699cde3\"\n\t\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/applications/5e542ee6ea048618d1831422/status",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"applications",
+						"5e542ee6ea048618d1831422",
+						"status"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
