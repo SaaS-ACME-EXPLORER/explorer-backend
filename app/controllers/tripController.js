@@ -2,6 +2,7 @@
 /*---------------TRIP----------------------*/
 
 const Trip = require('../models/Trip');
+const Application = require('../models/Application');
 const logger = require('../utils/logger');
 const actorUtils = require('../utils/actorUtils');
 
@@ -77,7 +78,6 @@ exports.create_one = async function (req, res) {
             if (error) {
                 res.status(500);
                 res.json({ message: error.message });
-
             }
         }
     } else {
@@ -90,7 +90,7 @@ exports.update_one = async function (req, res) {
     if (actorUtils.isManager(req.body.actorId)) {
         try {
 
-            let trip = await Trip.findOne({ ticker: req.params.trip_id })
+            let trip = await Trip.findOne({ ticker: req.params.trip_id });
 
             if (!trip) {
                 res.status(404);
@@ -101,7 +101,7 @@ exports.update_one = async function (req, res) {
                 res.json({ message: "403 Forbidden request" });
                 return
             } else if (trip.public) {
-                res.status(500);
+                res.status(403);
                 res.json({ message: "Trip already published" });
                 return
             } else {
@@ -151,22 +151,35 @@ exports.update_one = async function (req, res) {
     }
 };
 
-exports.delete_one = function (req, res) {
-    if (!actorUtils.isManager(req.body.actorId)) {
-        if (trip.public) {
-            res.status(500);
-            res.json({ message: "Trip already published" });
-            return
-        }
+exports.delete_one = async function (req, res) {
+    if (actorUtils.isManager(req.body.actorId)) {
+
         try {
-            Trip.deleteOne({ ticker: req.params.trip_id }, function (err, trip) {
-                if (err) {
-                    res.status(500).send(err);
-                }
-                else {
-                    res.json({ message: 'Trip successfully deleted' });
-                }
-            });
+            let trip = await Trip.findOne({ ticker: req.params.trip_id })
+
+            if (!trip) {
+                res.status(404);
+                res.json({ message: "Trip Not Found" });
+                return
+            } else if (trip.managedBy != req.body.actorId) {
+                res.status(403);
+                res.json({ message: "403 Forbidden request" });
+                return
+            } else if (trip.public) {
+                res.status(403);
+                res.json({ message: "Trip already published" });
+                return
+            } else {
+                Trip.deleteOne({ ticker: req.params.trip_id }, function (err, trip) {
+                    if (err) {
+                        res.status(500).send(err);
+                    }
+                    else {
+                        res.status(204);
+                        res.json({ message: 'Trip successfully deleted' });
+                    }
+                });
+            }
         } catch (error) {
             logger.error(error);
             res.status(500);
@@ -180,25 +193,49 @@ exports.delete_one = function (req, res) {
 };
 // Cancel a trip that has been published but has not yet started and does not have any accepted applications
 exports.cancel_a_trip = async function (req, res) {
-    if (!actorUtils.isManager(req.body.actorId)) {
+    if (actorUtils.isManager(req.query.actorId)) {
         try {
-            let trip = await Trip.findOneAndUpdate({ ticker: req.params.trip_id }, { cancelled: true }, {
-                new: true
-            });
-            if (!trip) {
-                logger.error(`ERROR: -GET /trip/${req.params.trip_id} - Not found trip with id: ${req.params.trip_id}`);
-                return res.status(404).send({
-                    message: "Trip not found with id " + req.params.trip_id
-                });
-            }
-            res.send(trip);
-            return
 
-        } catch (err) {
-            logger.error(`Error cancelling trip ${req.params.trip_id} `)
-            return res.status(500).send({
-                message: "Error cancelling trip with id " + req.params.trip_id
-            });
+            let trip = await Trip.findOne({ ticker: req.params.trip_id });
+            let applications = await Application.find({ tripId: req.params.trip_id, status: 'ACCEPTED' });
+            if (!trip ) {
+                res.status(404);
+                res.json({ message: "Trip Not Found" });
+                return
+            } else if (trip.managedBy != req.body.actorId) {
+                res.status(403);
+                res.json({ message: "403 Forbidden request" });
+                return
+            } else if (trip.startDate < Date.now()) {
+                res.status(403);
+                res.json({ message: "Trip already stared" });
+                return
+            } else if (applications) {
+                res.status(403);
+                res.json({ message: "Trip already has accepted Aplications" });
+                return
+            } else {
+                trip.cancelled = true;
+
+                if (req.body.cancelledReason) {
+                    trip.cancelledReason = req.body.cancelledReason;
+                } else {
+                    res.status(400);
+                    res.json({ message: "Trip cancellation error is required" });
+                    return
+                }
+
+                let response = await trip.save();
+                res.status(200);
+                res.json(response);
+                return
+            }
+
+        } catch (error) {
+            logger.error(error);
+            res.status(500);
+            res.json({ message: "Internal Error" });
+            return
         }
     } else {
         res.status(403);
