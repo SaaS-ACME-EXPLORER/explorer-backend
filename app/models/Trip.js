@@ -65,12 +65,9 @@ const TripSchema = new Schema({
     type: Boolean,
     default: false
   },
-  created: {
-    type: Date,
-    default: Date.now
-  },
   managedBy: {
     type: String,
+    ref: 'Actor',
     required: 'Manager ID must be provided'
   },
   img:
@@ -79,7 +76,11 @@ const TripSchema = new Schema({
   stages: {
     type: [StageSchema],
   }
-}, { strict: false, toJSON: { virtuals: true } });
+}, {
+  strict: false,
+  toJSON: { virtuals: true },
+  timestamps: true
+});
 
 function stagesMin(val) {
   return val.length > 0;
@@ -89,8 +90,6 @@ TripSchema.virtual('price').get(function () {
   return this.stages.reduce((a, b) => a + (b.price || 0), 0);
 });
 
-module.exports = mongoose.model('Stage', StageSchema);
-module.exports = mongoose.model('Trip', TripSchema);
 
 TripSchema.index({ startDate: 1, endDate: 1 });
 TripSchema.index({ title: 'text', description: 'text', ticker: 'text' });
@@ -102,11 +101,14 @@ TripSchema.pre('save', function (callback) {
 
   if (!newTrip.ticker) {
     var date = dateFormat(new Date(), "yymmdd");
-    var generated_ticker = [date, generate('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)].join('-')
+    var generated_ticker = [date, generate('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)].join('-');
     newTrip.ticker = generated_ticker;
   }
 
   callback();
 });
 
+
+module.exports = mongoose.model('Stage', StageSchema);
+module.exports = mongoose.model('Trip', TripSchema);
 

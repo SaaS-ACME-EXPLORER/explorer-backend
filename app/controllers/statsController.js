@@ -1,6 +1,6 @@
 'use strict';
 /*---------------TRIP----------------------*/
-const Trips = require('../models/Trips');
+const Trips = require('../models/Trip');
 //const Trip = require('../models/Trip');
 
 exports.by_managers = (req, res) => {

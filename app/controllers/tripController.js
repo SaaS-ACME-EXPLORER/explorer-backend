@@ -10,7 +10,7 @@ exports.find_all = async function (req, res) {
     try {
         let numperpages = parseInt(req.query['limit']) || 5;
         let page = parseInt(req.query['page']) || 1;
-        let numTrips = await Trip.count();
+        let numTrips = await Trip.countDocuments();
         let trips = await Trip.find()
             .skip((numperpages * page) - numperpages)
             .limit(numperpages);
@@ -49,8 +49,8 @@ exports.find_one = async function (req, res) {
 
 // Create a trip only if the logged user is 
 exports.create_one = async function (req, res) {
-    if (!actorUtils.isManager(req.body.actorId)) {
-        let trip = new Trip(req.body)
+    if (actorUtils.isManager(req.body.actorId)) {
+        let trip = new Trip(req.body.trip)
         try {
             trip.managedBy = req.body.actorId;
 
@@ -75,7 +75,7 @@ exports.create_one = async function (req, res) {
             res.json(response);
         } catch (error) {
             if (error) {
-                res.status(400);
+                res.status(500);
                 res.json({ message: error.message });
 
             }
@@ -87,7 +87,7 @@ exports.create_one = async function (req, res) {
 };
 
 exports.update_one = async function (req, res) {
-    if (!actorUtils.isManager(req.body.actorId)) {
+    if (actorUtils.isManager(req.body.actorId)) {
         try {
 
             let trip = await Trip.findOne({ ticker: req.params.trip_id })
@@ -105,15 +105,15 @@ exports.update_one = async function (req, res) {
                 res.json({ message: "Trip already published" });
                 return
             } else {
-                //   ticker, created and managedBy not editable
+                //   ticker and managedBy not editable
                 trip.title = req.body.title ? req.body.title : trip.title;
                 trip.description = req.body.description ? req.body.description : trip.description;
                 trip.price = req.body.price ? req.body.price : trip.price;
                 trip.requeriments = req.body.requeriments ? req.body.requeriments : trip.requeriments;
                 trip.startDate = req.body.startDate ? req.body.startDate : trip.startDate;
                 trip.endDate = req.body.endDate ? req.body.endDate : trip.endDate;
-                trip.cancelled = req.body.cancelled ? req.body.cancelled : trip.cancelled;
                 trip.stages = req.body.stages ? req.body.stages : trip.stages;
+                trip.cancelled = req.body.cancelled ? req.body.cancelled : trip.cancelled;
                 if (trip.cancelled) {
                     trip.cancelled = req.body.cancelled ? req.body.cancelled : trip.cancelled;
                     if (req.body.cancelledReason) {
