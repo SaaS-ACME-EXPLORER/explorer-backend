@@ -15,9 +15,8 @@ exports.list_all_resources = function (req, res) {
 };
 
 exports.read_a_resource = function (req, res) {
-    let name = req.query.name;
-    Resource.find({ name: name }, function (err, resource) {
-        if (err) {
+    Resource.find({ name: req.params.name }, function (err, resource) {
+        if (err || resource.length == 0) {
             res.sendStatus(404);
         } else {
             res.json(resource);
@@ -44,10 +43,10 @@ exports.create_a_resource = async function (req, res) {
 
 exports.update_a_resource = async function (req, res) {
     let actorId = req.body.actorId;
-    let updated_resource = new Resource(req.body.resource);
+    let updated_resource = req.body.resource;
     if (await actorUtils.getRoleById(actorId) == "ADMINISTRATOR") {
 
-        Resource.findOneAndUpdate({ _id: updated_resource._id }, updated_resource, function (err, resource) {
+        Resource.findOneAndUpdate({ _id: updated_resource._id }, updated_resource, {new: true}, function (err, resource) {
             if (err) {
                 res.sendStatus(400);
             } else {
@@ -61,7 +60,7 @@ exports.update_a_resource = async function (req, res) {
 };
 
 exports.delete_a_resource = async function (req, res) {
-    let resourceName = req.query.name;
+    let resourceName = req.params.name;
     let actorId = req.query.actorId;
     if (await actorUtils.getRoleById(actorId) == "ADMINISTRATOR") {
         Resource.deleteOne({ name: resourceName }, function (err, result) {
