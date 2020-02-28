@@ -17,11 +17,13 @@ var ApplicationSchema = new Schema({
   },
   tripId: {
     type: String,
-    required: "Trip ID must be provided"
+    required: "Trip ID must be provided",
+    ref: 'Trip'
   },
   explorerId: {
-    type: String,
-    required: "Explorer ID must be provided"
+    type: Schema.Types.ObjectId,
+    required: "Explorer ID must be provided",
+    ref: 'Actor'
   },
   comments: [{
     type: String,
