@@ -26,5 +26,5 @@ var FinderSchema = new Schema({
   }
 }, { strict: false });
 
-module.exports = mongoose.model('Resource', FinderSchema);
+module.exports = mongoose.model('Finder', FinderSchema);
 
