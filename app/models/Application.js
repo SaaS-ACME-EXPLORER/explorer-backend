@@ -32,4 +32,21 @@ var ApplicationSchema = new Schema({
   }
 }, { strict: false });
 
+ApplicationSchema.pre('save', function (callback) {
+  var application = this;
+  if (application.status != 'PEDING') {
+    application.status = 'PENDING';
+  }
+  if (application.statusReason && application.statusReason != "") {
+    application.statusReason = "";
+  }
+  if (application.paid) {
+    application.paid = false;
+  }
+  if (application.comments.length != 0) {
+    application.comments = [];
+  }
+  callback();
+});
+
 module.exports = mongoose.model('Application', ApplicationSchema);
