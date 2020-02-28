@@ -1,7 +1,6 @@
 var actorRoutes = require('./actorRoutes');
 var adminRoutes = require('./adminRoutes');
 var applicationRoutes = require('./applicationRoutes');
-var finderRoutes = require('./finderRoutes');
 var sponsorshipRoutes = require('./sponsorshipRoutes');
 var statRoutes = require('./statsRoutes');
 var tripRoutes = require('./tripRoutes');
@@ -16,7 +15,6 @@ module.exports = (app) => {
     actorRoutes(app);
     adminRoutes(app);
     applicationRoutes(app);
-    finderRoutes(app);
     sponsorshipRoutes(app);
     statRoutes(app);
     tripRoutes(app);

@@ -49,12 +49,12 @@ exports.list_all_actors = async function (req, res) {
 
 exports.create_an_actor = async function (req, res) {
     let new_actor = new Actor(req.body.actor);
-    let roleCreator = await actorUtils.getRoleById(req.body.actorId);
+    let roleCreator = await actorUtils.getRoleById(new_actor.actorId);
     let authorized = true;
 
-    if (new_actor.role != undefined) {
+    if (typeof new_actor.role !== undefined) {
 
-        if (roleCreator == undefined && new_actor.role != "EXPLORER") {
+        if (typeof roleCreator === undefined && new_actor.role != "EXPLORER") {
             authorized = false;
         } else if (roleCreator == "MANAGER" && (new_actor.role != "SPONSOR" || new_actor.role != "EXPLORER")) {
             authorized = false;

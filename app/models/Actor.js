@@ -3,6 +3,33 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
+//FINDER
+var FinderSchema = new Schema({
+  keyWord: {
+    type: String,
+    default: null
+  },
+  startDate: {
+    type: Date,
+    default: null
+  },
+  endDate: {
+    type: Date,
+    default: null
+  },
+  minPrice: {
+    type: Number,
+    min: 0,
+    default: null
+  },
+  maxPrice: {
+    type: Number,
+    min: 0,
+    default: null
+  }
+}, { strict: false });
+
+//ACTOR
 var ActorSchema = new Schema({
   name: {
     type: String,
@@ -44,8 +71,13 @@ var ActorSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  finder: {
+    type: FinderSchema,
+    required: function () { return this.role === 'EXPLORER' }
   }
 }, { strict: false });
+
 
 ActorSchema.pre('save', function (callback) {
   let actor = this;
