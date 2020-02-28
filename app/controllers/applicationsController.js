@@ -305,6 +305,7 @@ var payAnApplicationValidator = async function (applicationId, body) {
 //Managers: Can cange status from “PENDING” to “REJECTED” (reason why) or from “PENDING” to “DUE”
 //Explorer: Cancel an application with status “PENDING”
 //Summary: update state and its reason if it is cancel or rejected;
+//params: app_id
 //body: {status: "REJECTED"||"DUE"||"CANCELLED", statusReason: "abc", actorId: "123abc"}
 exports.change_an_application_status = async function (req, res) {
   const applicationId = req.params.app_id;
