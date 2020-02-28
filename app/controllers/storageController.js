@@ -5,7 +5,6 @@ const generate = require('nanoid/generate');
 const logger = require('../utils/logger');
 const Trip = require('../models/Trip');
 const Application = require('../models/Application');
-const Finder = require('../models/Finder');
 const Sponsorship = require('../models/Sponsorship');
 const Actor = require('../models/Actor');
 
