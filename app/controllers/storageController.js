@@ -28,15 +28,6 @@ exports.store_json_insertMany = async function (req, res) {
     status: function () {
       return dummyjson.utils.randomArrayItem(['PENDING', 'REJECTED', 'DUE', 'ACCEPTED', 'CANCELLED']);
     },
-    actorId: function () {
-      return generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
-    },
-    tripId: function () {
-      return generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
-    },
-    stageId: function () {
-      return generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
-    },
     ticker: function () {
 
       let startDate = new Date(2012, 0, 1);
@@ -49,7 +40,7 @@ exports.store_json_insertMany = async function (req, res) {
       return generated_ticker;
 
     },
-    mongoID: function(){
+    mongoID: function () {
       return mongoose.Types.ObjectId();
     }
 
