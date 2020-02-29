@@ -251,7 +251,7 @@ exports.finder_find_all = function (req, res) {
     let finder = actorUtils.getActorFinder(actorId);
     if (finder) {
         Application.find({explorerid: actorId}, function(error,applications){
-            
+
         });
     } else {
         logger.error("The actor must be an explorer");
@@ -262,14 +262,14 @@ exports.finder_find_all = function (req, res) {
 
 
 
-Trip.aggregate([
-    {
-        $match: {
-            $text: {
-                $search: "prueba",
-                $caseSensitive: false,
-                $diacriticSensitive: false
-            }
-        }
-    }
-]);
+// Trip.aggregate([
+//     {
+//         $match: {
+//             $text: {
+//                 $search: "prueba",
+//                 $caseSensitive: false,
+//                 $diacriticSensitive: false
+//             }
+//         }
+//     }
+// ]);
