@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function(app) {
+module.exports = function (app) {
 
     var trips = require('../controllers/tripController');
 
@@ -15,4 +15,6 @@ module.exports = function(app) {
     app.route(BASE_API_PATH + '/trips/:trip_id/cancel')
         .put(trips.cancel_a_trip); //cancel trip  (only is able to cancel and not opening) --REASON IS A MUST
 
+    app.route(BASE_API_PATH + '/trips/finder')
+        .get(trips.finder_find_all);
 };

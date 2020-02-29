@@ -78,3 +78,19 @@ exports.copyProperties = function copyProperties(source_obj, new_obj) {
     new_obj.password = source_obj.password;
     return new_obj;
 }
+
+
+exports.getActorFinder = function (actorId) {
+    let isAnExplorer = isExplorer(actorId);
+    if (isAnExplorer) {
+        Actor.findById(actorId, function (error, actor) {
+            if(error){
+                return null;
+            }else{
+                return actor.finder
+            }
+        });
+    } else {
+        return null;
+    }
+}
