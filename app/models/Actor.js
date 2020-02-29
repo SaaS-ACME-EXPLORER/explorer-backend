@@ -78,9 +78,31 @@ var ActorSchema = new Schema({
   }
 }, { strict: false });
 
+// Initially, every search criterion must be null.
+// Default can't avoid to receive a finder attribute that it is not null, so we force it to do so.
+var checkExplorerFinder = function (actor) {
+  if (actor.role === 'EXPLORER') {
+    if (actor.finder.keyWord) {
+      actor.finder.keyWord = null;
+    }
+    if (actor.finder.startDate) {
+      actor.finder.startDate = null;
+    }
+    if (actor.finder.endDate) {
+      actor.finder.endDate = null;
+    }
+    if(actor.finder.minPrice){
+      actor.finder.minPrice = null;
+    }
+    if(actor.finder.maxPrice){
+      actor.finder.minPrice = null;
+    }
+  }
+};
 
 ActorSchema.pre('save', function (callback) {
-  let actor = this;
+  var actor = this;
+  checkExplorerFinder(actor);
   if (actor.isNew) {
     // Password changed so we need to hash it
     bcrypt.genSalt(5, function (err, salt) {
