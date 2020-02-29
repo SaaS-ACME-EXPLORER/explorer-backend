@@ -2,7 +2,7 @@
   "Trip": [
       {{#repeat 10000}}
         {
-          "ticker": "{{@guid}}",
+          "ticker": "{{ticker}}",
           "title": "{{lorem 5}}",
           "description": "{{lorem 15}}",
           "requeriments": "{{lorem 15}}",
@@ -10,7 +10,7 @@
           "endDate": "{{date '2010' '2020'}}",
           "cancelled": {{boolean}},
           "public": {{boolean}},
-          "managedBy": "{{@guid}}",
+          "managedBy": "{{mongoID}}",
           "stages": [
                   {{#repeat 4}}
                     {
@@ -36,7 +36,7 @@
           "address": "{{int 1 100}} {{street}}",
           "role": "{{role}}",
           "active": {{boolean}},
-          "managedBy": "{{@guid}}"
+          "finder": {}
         }
     {{/repeat}}
   ],
@@ -45,8 +45,8 @@
         {
           "status": "{{status}}",
           "paid": {{boolean}},
-          "tripId": "{{@guid}}",
-          "explorerId": "{{@guid}}",
+          "tripId": "{{mongoID}}",
+          "explorerId": "{{mongoID}}",
           "comments":[
                       {{#repeat 3}}
                       "{{lorem 15}}"
@@ -58,10 +58,10 @@
 "Sponsorship": [
       {{#repeat 10000}}
         {
-          "sponsorId": "{{@guid}}",
-          "tripId": "{{@guid}}",
+          "sponsorId": "{{mongoID}}",
+          "tripId": "{{mongoID}}",
           "paid": {{boolean}},
-          "link": "www.{{company}}.com"
+          "link": "https://www.{{company}}.com"
         }
     {{/repeat}}
   ]

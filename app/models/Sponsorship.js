@@ -19,7 +19,7 @@ var SponsorshipSchema = new Schema({
   link: {
     type: String,
     required: 'Link must be provided',
-    match: [/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/, 'Please fill a valid email address']
+    match: [/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/, 'Please fill a valid link']
   },
   created: {
     type: Date,

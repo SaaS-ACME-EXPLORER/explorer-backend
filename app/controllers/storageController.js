@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 const generate = require('nanoid/generate');
+const dateFormat = require('dateformat');
 
 const logger = require('../utils/logger');
 const Trip = require('../models/Trip');
@@ -35,6 +36,21 @@ exports.store_json_insertMany = async function (req, res) {
     },
     stageId: function () {
       return generate('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 15);
+    },
+    ticker: function () {
+
+      let startDate = new Date(2012, 0, 1);
+      let endDate = new Date();
+
+      let randomDate = new Date(startDate.getTime() + Math.random() * (endDate.getTime() - startDate.getTime()));
+
+      let date = dateFormat(randomDate, "yymmdd");
+      let generated_ticker = [date, generate('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)].join('-');
+      return generated_ticker;
+
+    },
+    mongoID: function(){
+      return mongoose.Types.ObjectId();
     }
 
 
@@ -62,7 +78,7 @@ exports.store_json_insertMany = async function (req, res) {
       var collectionModel = mongoose.model(mongooseModel);
 
       logger.info('Inserting ' + source.length + ' documents into the Model ' + mongooseModel);
-      _insert(collectionModel, source, res,mongooseModel);
+      _insert(collectionModel, source, res, mongooseModel);
     }
     console.log('End')
   }

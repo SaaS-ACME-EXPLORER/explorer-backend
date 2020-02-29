@@ -193,7 +193,7 @@ exports.delete_one = async function (req, res) {
 };
 // Cancel a trip that has been published but has not yet started and does not have any accepted applications
 exports.cancel_a_trip = async function (req, res) {
-    if (actorUtils.isManager(req.query.actorId)) {
+    if (actorUtils.isManager(req.body.actorId)) {
         try {
 
             let trip = await Trip.findOne({ ticker: req.params.trip_id });
@@ -206,7 +206,7 @@ exports.cancel_a_trip = async function (req, res) {
                 res.status(403);
                 res.json({ message: "403 Forbidden request" });
                 return
-            } else if (trip.startDate < Date.now()) {
+            } else if (trip.startDate < Date.now()) {   
                 res.status(403);
                 res.json({ message: "Trip already stared" });
                 return
