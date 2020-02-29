@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "4fa66851-c705-480d-b245-3efb003d0d64",
-		"name": "ACTORS",
+		"_postman_id": "9fb2a4ff-0c21-4901-93a7-cfde8e17732c",
+		"name": "ACME-EXPLORER-ACTORS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -37,7 +37,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/v1/actors/5e52c9b8a603ef8d2551faf6?actorId=5e4c39a19ac37c5fc442f719",
+					"raw": "localhost:3000/api/v1/actors/5e52a86f47543c53cca08f8e?actorId=5e52a32897ec734d3699cde3",
 					"host": [
 						"localhost"
 					],
@@ -46,12 +46,12 @@
 						"api",
 						"v1",
 						"actors",
-						"5e52c9b8a603ef8d2551faf6"
+						"5e52a86f47543c53cca08f8e"
 					],
 					"query": [
 						{
 							"key": "actorId",
-							"value": "5e4c39a19ac37c5fc442f719"
+							"value": "5e52a32897ec734d3699cde3"
 						}
 					]
 				}
@@ -70,7 +70,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"actor\": {\n\t\"name\": \"AdminName\",\n\t\"surname\": \"AdminSurname\",\n\t\"email\": \"managersad2@fakemail.com\",\n\t\"password\": \"mypa2ss1234\",\n\t\"phone\": \"+34612345670\",\n\t\"role\": \"MANAGER\",\n\t\"address\": \"myAddress\"\n\t},\n\t\"actorCreator\" : \"5e5153b8260e9d783d66ef49\"\n}"
+					"raw": "{\n\t\"actor\": {\n\t\t\"name\": \"admin\",\n\t\t\"surname\": \"admin\",\n\t\t\"email\": \"admin@fakemail.com\",\n\t\t\"password\": \"mypa2ss1234\",\n\t\t\"phone\": \"+34612345670\",\n\t\t\"role\": \"EXPLORER\",\n\t\t\"address\": \"myAddress\",\n\t\t\"finder\": {\n\t\t\t\"keyWord\": \"ejemplo\"\n\t\t}\n\t},\n\t\"actorId\" : \"5e5153b8260e9d783d66ef49\"\n}"
 				},
 				"url": {
 					"raw": "localhost:3000/api/v1/actors",
@@ -88,7 +88,7 @@
 			"response": []
 		},
 		{
-			"name": "PUT ITEM",
+			"name": "PUT ACTOR",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -99,10 +99,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"updatedActor\": {\n\t\t\"id_\": \"5e4c39a19ac37c5fc442f719\",\n\t    \"preferredLanguage\": \"en\",\n\t    \"active\": true,\n\t    \"name\": \"AdminNames\",\n\t    \"surname\": \"AdminSurname\",\n\t    \"email\": \"adminas@fakemail.com\",\n\t    \"phone\": \"+34612345670\",\n\t    \"role\": \"ADMINISTRATOR\",\n\t    \"address\": \"myAddress\"\n    },\n    \"actorId\": \"5e52c94da603ef8d2551faf4\"\n}"
+					"raw": "{\n\t\"updatedActor\": {\n\t    \"finder\":{\n\t    \t\"keyWord\": \"prueba2\"\n\t    }\n    },\n    \"actorId\": \"5e59587e66926836954e2862\"\n}"
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/actors",
+					"raw": "http://localhost:3000/api/v1/actors/5e59587e66926836954e2862",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -111,7 +111,8 @@
 					"path": [
 						"api",
 						"v1",
-						"actors"
+						"actors",
+						"5e59587e66926836954e2862"
 					]
 				}
 			},
@@ -131,7 +132,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"actorId\": \"5e5159c6303282792bc37594\",\n\t\"adminId\": \"5e5159c6303282792bc37594\",\n\t\"active\": false\n}",
+					"raw": "{\n\t\"adminId\": \"5e5a3b697449842effe07665\",\n\t\"active\": false\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -139,7 +140,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/actors/ban",
+					"raw": "http://localhost:3000/api/v1/actors/5e59587e66926836954e2862/ban",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -149,6 +150,7 @@
 						"api",
 						"v1",
 						"actors",
+						"5e59587e66926836954e2862",
 						"ban"
 					]
 				}
@@ -169,7 +171,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"actorId\": \"5e4c3c01d717af5fda797ba3\",\n\t\"oldPass\": \"mypass12w4\",\n\t\"newPass\": \"mypass12w42\"\n}",
+					"raw": "{\n\t\"oldPass\": \"mypass12w4\",\n\t\"newPass\": \"mypass12w42\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -177,7 +179,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/api/v1/actors/password",
+					"raw": "http://localhost:3000/api/v1/actors/5e59587e66926836954e2862/password",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -187,6 +189,7 @@
 						"api",
 						"v1",
 						"actors",
+						"5e59587e66926836954e2862",
 						"password"
 					]
 				}

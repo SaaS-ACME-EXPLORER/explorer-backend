@@ -84,23 +84,23 @@ exports.create_an_actor = async function (req, res) {
 };
 
 exports.read_an_actor = async function (req, res) {
-    let roleFinder = await actorUtils.getRoleById(req.query.actorId);
-
-    Actor.findById(req.params.actorId, function (err, actor) {
+    let actorUpdater = await actorUtils.getRoleById(req.query.actorId);
+    let actorToUpdate = req.params.actorId;
+    Actor.findById(actorToUpdate, function (err, actor) {
         if (err) {
             res.status(404).send(err);
         } else {
 
             let authorized = false;
 
-            if (roleFinder == "MANAGER" && (actor.role == "SPONSOR" || actor.role == "EXPLORER")) {
+            if (actorUpdater == "MANAGER" && (actor.role == "SPONSOR" || actor.role == "EXPLORER")) {
                 authorized = true;
-            } else if (roleFinder == "ADMINISTRATOR" && actor.role != "ADMINISTRATOR") {
+            } else if (actorUpdater == "ADMINISTRATOR" && actor.role != "ADMINISTRATOR") {
                 authorized = true;
             }
 
             if (authorized) {
-                res.json(actor);
+                res.status(200).send(actor);
             } else {
                 res.sendStatus(403);
             }
@@ -110,16 +110,24 @@ exports.read_an_actor = async function (req, res) {
 
 exports.update_an_actor = function (req, res) {
 
-    let updatedActor = req.body.updatedActor;
+    const updatedActor = req.body.updatedActor;
+    const updatedActorId = req.params.actorId;
+    const actorId = req.body.actorId; 
 
-    let authorized = req.body.actorId == updatedActor.id_;
+    if(!updatedActor || !actorId || !updatedActorId){
+        logger.error("Invalid updatedActor, actorId or updatedActorId");
+        res.status(400).json({"error": "Invalid updatedActor, actorId or updatedActorId"});
+        return;
+    }
+    
+    let authorized = actorId == updatedActorId;
 
     if (authorized) {
-        Actor.findByIdAndUpdate(updatedActor.id_, updatedActor, function (err, actor) {
+        Actor.findByIdAndUpdate(updatedActorId, updatedActor, { new: true }, function (err, actor) {
             if (err) {
                 res.status(404).send(err);
             } else {
-                res.json(actor);
+                res.status(200).send(actor);
             }
         });
     } else {
@@ -131,10 +139,10 @@ exports.change_an_actor_status = async function (req, res) {
 
     let roleBanner = await actorUtils.getRoleById(req.body.adminId);
     let active = req.body.active;
-    let actorId = req.body.actorId;
+    let actorId = req.params.actorId;
 
-    if (roleBanner == "ADMINISTRATOR") {
-        if (active === undefined) {
+    if (roleBanner === "ADMINISTRATOR") {
+        if (typeof active == undefined || active == null) {
             res.sendStatus(400);
         } else {
             Actor.findById(actorId, function (err, actor) {
@@ -145,12 +153,11 @@ exports.change_an_actor_status = async function (req, res) {
                         res.sendStatus(403);
                     } else {
                         actor.active = active;
-                        Actor.s
                         actor.save(function (err, actor) {
                             if (err) {
                                 res.sendStatus(500).send(err);
                             } else {
-                                res.json(actor);
+                                res.status(200).send(actor);
                             }
                         });
                     }
@@ -162,8 +169,9 @@ exports.change_an_actor_status = async function (req, res) {
     }
 };
 
+
 exports.change_password = async function (req, res) {
-    let actorId = req.body.actorId;
+    let actorId = req.params.actorId;
     let oldPass = req.body.oldPass;
     let newPass = req.body.newPass;
 
