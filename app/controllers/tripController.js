@@ -198,7 +198,7 @@ exports.cancel_a_trip = async function (req, res) {
 
             let trip = await Trip.findOne({ ticker: req.params.trip_id });
             let applications = await Application.find({ tripId: req.params.trip_id, status: 'ACCEPTED' });
-            if (!trip ) {
+            if (!trip) {
                 res.status(404);
                 res.json({ message: "Trip Not Found" });
                 return
@@ -206,7 +206,7 @@ exports.cancel_a_trip = async function (req, res) {
                 res.status(403);
                 res.json({ message: "403 Forbidden request" });
                 return
-            } else if (trip.startDate < Date.now()) {   
+            } else if (trip.startDate < Date.now()) {
                 res.status(403);
                 res.json({ message: "Trip already stared" });
                 return
@@ -242,3 +242,34 @@ exports.cancel_a_trip = async function (req, res) {
         res.json({ message: "403 Forbidden request" });
     }
 };
+
+
+//Find the trips that meet the search criteria (finder)
+//params: ?actorId=123abc&&
+exports.finder_find_all = function (req, res) {
+    const actorId = req.query.actorId;
+    let finder = actorUtils.getActorFinder(actorId);
+    if (finder) {
+        Application.find({explorerid: actorId}, function(error,applications){
+            
+        });
+    } else {
+        logger.error("The actor must be an explorer");
+        res.status(403).json({ "error": "The actor must be an explorer" });
+    }
+}
+
+
+
+
+Trip.aggregate([
+    {
+        $match: {
+            $text: {
+                $search: "prueba",
+                $caseSensitive: false,
+                $diacriticSensitive: false
+            }
+        }
+    }
+]);
