@@ -4,11 +4,6 @@ const generate = require('nanoid/generate');
 const dateFormat = require('dateformat');
 
 const logger = require('../utils/logger');
-const Trip = require('../models/Trip');
-const Application = require('../models/Application');
-const Sponsorship = require('../models/Sponsorship');
-const Actor = require('../models/Actor');
-
 
 
 exports.store_json_insertMany = async function (req, res) {
