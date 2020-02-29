@@ -20,12 +20,8 @@ var SponsorshipSchema = new Schema({
     type: String,
     required: 'Link must be provided',
     match: [/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/, 'Please fill a valid link']
-  },
-  created: {
-    type: Date,
-    default: Date.now
   }
-}, { strict: true });
+}, { strict: true, timestamps: true });
 
 
 SponsorshipSchema.index({ sponsorId: 1, tripId: 1});

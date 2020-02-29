@@ -2,6 +2,10 @@
 const mongoose = require('mongoose');
 const generate = require('nanoid/generate');
 const dateFormat = require('dateformat');
+const Actor = require('../models/Actor');
+const Trips = require('../models/Trip');
+const Applications = require('../models/Application');
+const Sponsorship = require('../models/Sponsorship');
 
 const logger = require('../utils/logger');
 
@@ -64,7 +68,7 @@ exports.store_json_insertMany = async function (req, res) {
       var collectionModel = mongoose.model(mongooseModel);
 
       logger.info('Inserting ' + source.length + ' documents into the Model ' + mongooseModel);
-      _insert(collectionModel, source, res, mongooseModel);
+      await _insert(collectionModel, source, res, mongooseModel);
     }
     console.log('End')
   }
@@ -72,8 +76,7 @@ exports.store_json_insertMany = async function (req, res) {
     response += 'Malformed template.';
     logger.info(response);
   }
-  res.send(response);
-
+  res.status(200).send(response);
 };
 
 const _insert = async (collectionModel, source, res, mongooseModel) => {
@@ -83,11 +86,52 @@ const _insert = async (collectionModel, source, res, mongooseModel) => {
       res.send(err);
       return;
     } else {
-      res = 'All documents stored in the ' + mongooseModel;
-      logger.info(res);
+      logger.info('All documents stored in the ' + mongooseModel);
     }
   });
 }
+
+exports.create_relations = async function (req, res) {
+  let managersIds = await Actor.find({ role: 'MANAGER' }).distinct('_id');
+  managersIds = managersIds.map(actor => actor._id.toString());
+
+  const trips = await Trips.find();
+  // const tripsIds = trips.map(trip => trip._id.toString());
+
+  console.info('Saving trips');
+  trips.forEach(async function (trip) {
+    trip.managedBy = managersIds[Math.floor(Math.random() * managersIds.length)];
+    await trip.save();
+
+  });
+  console.info('DONE Saving trips');
+
+  console.info('Saving sponsorships');
+  const sponsorships = await Sponsorship.find();
+  sponsorships.forEach(async function (sponsorship, index) {
+    sponsorship.tripId = trips[index]._id;
+    await sponsorship.save();
+  });
+  console.info('DONE Saving sponsorships');
+
+
+  let explorersIds = await Actor.find({ role: 'EXPLORER' }).distinct('_id');
+  // explorersIds = explorersIds.map(actor => actor._id.toString());
+
+  console.info('Saving appliations');
+  const appliations = await Applications.find();
+  appliations.forEach(async function (appliation) {
+    appliation.tripId = trips[Math.floor(Math.random() * trips.length)]._id;
+    appliation.explorerId = explorersIds[Math.floor(Math.random() * explorersIds.length)];
+    await appliation.save();
+  });
+  console.info('DONE Saving appliations');
+
+  console.info('Done');
+
+  res.status(200).send();
+}
+
 
 exports.store_json_fs = function (req, res) {
 

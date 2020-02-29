@@ -27,12 +27,8 @@ var ApplicationSchema = new Schema({
   },
   comments: [{
     type: String,
-  }],
-  created: {
-    type: Date,
-    default: Date.now
-  }
-}, { strict: false });
+  }]
+}, { strict: false, timestamps: true });
 
 ApplicationSchema.pre('save', function (callback) {
   var application = this;

@@ -68,15 +68,11 @@ var ActorSchema = new Schema({
     type: Boolean,
     default: true
   },
-  created: {
-    type: Date,
-    default: Date.now
-  },
   finder: {
     type: FinderSchema,
     required: function () { return this.role === 'EXPLORER' }
   }
-}, { strict: false });
+}, { strict: false, timestamps: true});
 
 // Initially, every search criterion must be null.
 // Default can't avoid to receive a finder attribute that it is not null, so we force it to do so.

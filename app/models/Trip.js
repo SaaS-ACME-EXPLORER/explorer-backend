@@ -66,7 +66,7 @@ const TripSchema = new Schema({
     default: false
   },
   managedBy: {
-    type: String,
+    type: Schema.Types.ObjectId,
     ref: 'Actor',
     required: 'Manager ID must be provided'
   },
@@ -92,7 +92,7 @@ TripSchema.virtual('price').get(function () {
 
 
 TripSchema.index({ startDate: 1, endDate: 1 });
-TripSchema.index({ price: 1});
+TripSchema.index({ price: 1 });
 TripSchema.index({ ticker: 'text', title: 'text', description: 'text' });
 
 // Execute before each item.save() call
