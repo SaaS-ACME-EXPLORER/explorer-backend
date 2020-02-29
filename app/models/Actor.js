@@ -119,4 +119,6 @@ ActorSchema.pre('save', function (callback) {
   }
 });
 
+ActorSchema.index({ role: "text"});
+
 module.exports = mongoose.model('Actor', ActorSchema);
