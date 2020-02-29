@@ -92,7 +92,8 @@ TripSchema.virtual('price').get(function () {
 
 
 TripSchema.index({ startDate: 1, endDate: 1 });
-TripSchema.index({ title: 'text', description: 'text', ticker: 'text' });
+TripSchema.index({ price: 1});
+TripSchema.index({ ticker: 'text', title: 'text', description: 'text' });
 
 // Execute before each item.save() call
 TripSchema.pre('save', function (callback) {
