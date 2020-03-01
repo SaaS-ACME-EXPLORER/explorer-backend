@@ -250,25 +250,22 @@ exports.finder_find_all = function (req, res) {
     const actorId = req.query.actorId;
     let finder = actorUtils.getActorFinder(actorId);
     if (finder) {
-        Application.find({ explorerid: actorId }, function (error, applications) {
-            let applicationIds = applications.map(a => a.tripId);
-            return Trip.aggregate([
-                {
-                    $match: {
-                        $text: {
-                            $search: finder.keyWord,
-                            $caseSensitive: false,
-                            $diacriticSensitive: false
-                        },
-                        ticker: { $in: applicationIds },
-                        startDate: { $gte: finder.startDate },
-                        endDate: { $lte: finder.endDate },
-                        price: { $gte: finder.minPrice },
-                        price: { $lte: finder.maxPrice }
-                    }
+        return Trip.aggregate([
+            {
+                $match: {
+                    $text: {
+                        $search: finder.keyWord,
+                        $caseSensitive: false,
+                        $diacriticSensitive: false
+                    },
+                    startDate: { $gte: finder.startDate },
+                    endDate: { $lte: finder.endDate },
+                    price: { $gte: finder.minPrice },
+                    price: { $lte: finder.maxPrice }
                 }
-            ]);
-        });
+            }
+        ]);
+
     } else {
         logger.error("The actor must be an explorer");
         res.status(403).json({ "error": "The actor must be an explorer" });
