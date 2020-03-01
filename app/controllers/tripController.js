@@ -3,6 +3,7 @@
 
 const Trip = require('../models/Trip');
 const Application = require('../models/Application');
+const Resource = require('../models/Resources');
 const logger = require('../utils/logger');
 const actorUtils = require('../utils/actorUtils');
 
@@ -246,28 +247,92 @@ exports.cancel_a_trip = async function (req, res) {
 
 //Find the trips that meet the search criteria (finder)
 //params: ?actorId=123abc&&
-exports.finder_find_all = function (req, res) {
+exports.finder_find_all = async function (req, res) {
     const actorId = req.query.actorId;
     let finder = actorUtils.getActorFinder(actorId);
     if (finder) {
-        return Trip.aggregate([
-            {
-                $match: {
-                    $text: {
-                        $search: finder.keyWord,
-                        $caseSensitive: false,
-                        $diacriticSensitive: false
-                    },
-                    startDate: { $gte: finder.startDate },
-                    endDate: { $lte: finder.endDate },
-                    price: { $gte: finder.minPrice },
-                    price: { $lte: finder.maxPrice }
-                }
-            }
-        ]);
-
+        let limit = await getFinderResultsLimit();
+        let aggregate = buildAggregate(finder, limit);
+        if (aggregate) {
+            return Trip.aggregate(aggregate);
+        } else {
+            // In case all finder criterias are null
+            return Trip.find().limit(limit);
+        }
     } else {
         logger.error("The actor must be an explorer");
         res.status(403).json({ "error": "The actor must be an explorer" });
     }
 }
+
+//Get the results limit that match the finder criterias (default: 10, max: 100)
+var getFinderResultsLimit = async function () {
+
+    await Resource.findOne({ name: 'FinderResultLimit' }, function (error, resource) {
+        if (error || !resource) {
+            logger.error("Error when searching a resource with name: FinderResultLimit");
+            return 10;
+        } else {
+            if (!isNaN(resource.value)) {
+                try {
+                    let val = parseInt(resource.value);
+                    let limit = (val > 0 && val <= 100) ? val : 10;
+                    return limit;
+                } catch (error) {
+                    logger.error("Unexpected error (possibly parsing resource.value)")
+                    return 10;
+                }
+            } else {
+                logger.error("FinderResultLimit resource is not a number");
+                return 10;
+            }
+        }
+    });
+
+};
+
+var buildAggregate = function (finder, limit) {
+    let aggregate = [];
+    if (finder.keyWord || startDate || endDate || price) {
+        let match = {};
+        match.$match = {};
+        if (finder.keyWord) {
+            match.$match.$text = { $search: finder.keyWord, $caseSensitive: false, $diacriticSensitive: false };
+        }
+        if (startDate) {
+            match.$match.startDate = { $gte: finder.startDate };
+        }
+        if (endDate) {
+            match.$match.endDate = { $lte: finder.endDate };
+        }
+        if (price) {
+            match.$match.price = { $gte: finder.minPrice, $lte: finder.maxPrice };
+        }
+        aggregate.push(match);
+        aggregate.push({ $sort: { startDate: -1 } });
+        aggregate.push({ $limit: limit });
+        return aggregate;
+    }
+    return null;
+};
+
+
+
+
+// return Trip.aggregate([
+//     {
+//         $match: {
+//             $text: {
+//                 $search: finder.keyWord,
+//                 $caseSensitive: false,
+//                 $diacriticSensitive: false
+//             },
+//             startDate: { $gte: finder.startDate },
+//             endDate: { $lte: finder.endDate },
+//             price: { $gte: finder.minPrice, $lte: finder.maxPrice }
+//         }
+//     },
+//     {
+//         $sort: { startDate: -1 }
+//     }
+// ]);
