@@ -17,7 +17,8 @@ exports.by_managers = (req, res) => {
                     _id: null,
                     max: { $max: "$count" },
                     min: { $min: "$count" },
-                    avg: { $avg: "$count" }
+                    avg: { $avg: "$count" },
+                    stdDev: { $stdDevPop: "$count" }
                 }
             },
             {
@@ -25,14 +26,16 @@ exports.by_managers = (req, res) => {
                     _id: 0,
                     max: "$max",
                     min: "$min",
-                    avg: "$avg"
+                    avg: "$avg",
+                    stdDev: "$stdDev"
                 }
             }
 
         ],
         function (err, result) {
             if (err) {
-                res.sensStatus(500);
+                console.log(err)
+                res.sendStatus(500);
             } else {
                 res.json(result[0]);
             }
@@ -54,7 +57,8 @@ exports.by_application_trips = (req, res) => {
                     _id: null,
                     max: { $max: "$count" },
                     min: { $min: "$count" },
-                    avg: { $avg: "$count" }
+                    avg: { $avg: "$count" },
+                    stdDev: { $stdDevPop: "$count" }
                 }
             },
             {
@@ -62,7 +66,8 @@ exports.by_application_trips = (req, res) => {
                     _id: 0,
                     max: "$max",
                     min: "$min",
-                    avg: "$avg"
+                    avg: "$avg",
+                    stdDev: "$stdDev"
                 }
             }
 
@@ -91,7 +96,8 @@ exports.by_price_trips = (req, res) => {
                     _id: null,
                     max: { $max: "$price" },
                     min: { $min: "$price" },
-                    avg: { $avg: "$price" }
+                    avg: { $avg: "$price" },
+                    stdDev: { $stdDevPop: "$count" }
                 }
             },
             {
@@ -99,7 +105,8 @@ exports.by_price_trips = (req, res) => {
                     _id: 0,
                     max: "$max",
                     min: "$min",
-                    avg: "$avg"
+                    avg: "$avg",
+                    stdDev: "$stdDev"
                 }
             }
 
