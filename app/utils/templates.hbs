@@ -36,7 +36,13 @@
           "address": "{{int 1 100}} {{street}}",
           "role": "{{role}}",
           "active": {{boolean}},
-          "finder": {}
+          "finder": {
+              "keyWord": "{{lorem 1}}",
+              "startDate":"{{date '2020-01-01' '2021-12-31'}}",
+              "endDate": "{{date '2020-01-01' '2021-12-31'}}",
+              "minPrice": {{int 0 100}},
+              "maxPrice": {{int 100 200}}
+          }
         }
     {{/repeat}}
   ],
