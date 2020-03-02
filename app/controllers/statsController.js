@@ -1,40 +1,142 @@
 'use strict';
 /*---------------TRIP----------------------*/
 const Trips = require('../models/Trip');
-//const Trip = require('../models/Trip');
+const Applications = require('../models/Application');
 
-// The average, the minimum, the maximum, and the standard deviation of the number of trips managed per manager
 exports.by_managers = (req, res) => {
-    let bymanagers = Trips.aggregate([
-        { $group: { _id: { managedBy: "$managedBy" }, contador: { $sum: 1 } } },
-        {
-            $facet: {
-                max: [{ $sort: { contador: -1 } }],
-                min: [{ $sort: { contador: 1 } }],
-                average: {$avg:  { contador }
+    Trips.aggregate(
+        [
+            {
+                $group: {
+                    _id: { manager: "$managedBy" },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    max: { $max: "$count" },
+                    min: { $min: "$count" },
+                    avg: { $avg: "$count" },
+                    stdDev: { $stdDevPop: "$count" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    max: "$max",
+                    min: "$min",
+                    avg: "$avg",
+                    stdDev: "$stdDev"
+                }
             }
-        },
-        {
-            $project: {
-                max: { $arrayElemAt: ["$max", 0] },
-                min: { $arrayElemAt: ["$min", 0] }
+
+        ],
+        function (err, result) {
+            if (err) {
+                console.log(err)
+                res.sendStatus(500);
+            } else {
+                res.json(result[0]);
             }
         }
-    ], function (err, res) {
-        console.log(res[0])
-    });
-    console.log(bymanagers);
-    res.status(200).send("OK");
+    )
 };
 
 exports.by_application_trips = (req, res) => {
-    res.status(200).send("OK");
+    Applications.aggregate(
+        [
+            {
+                $group: {
+                    _id: { trip: "$tripId" },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    max: { $max: "$count" },
+                    min: { $min: "$count" },
+                    avg: { $avg: "$count" },
+                    stdDev: { $stdDevPop: "$count" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    max: "$max",
+                    min: "$min",
+                    avg: "$avg",
+                    stdDev: "$stdDev"
+                }
+            }
+
+        ],
+        function (err, result) {
+            if (err) {
+                res.sensStatus(500);
+            } else {
+                res.json(result[0]);
+            }
+        }
+    )
 };
 
 exports.by_price_trips = (req, res) => {
-    res.status(200).send("OK");
+    Trips.aggregate(
+        [
+            {
+                $group: {
+                    _id: { trip: "$ticker" },
+                    price: { $sum: "$stages.price" }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    max: { $max: "$price" },
+                    min: { $min: "$price" },
+                    avg: { $avg: "$price" },
+                    stdDev: { $stdDevPop: "$count" }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    max: "$max",
+                    min: "$min",
+                    avg: "$avg",
+                    stdDev: "$stdDev"
+                }
+            }
+
+        ],
+        function (err, result) {
+            if (err) {
+                res.sensStatus(500);
+            } else {
+                res.json(result[0]);
+            }
+        }
+    )
 };
 
-exports.by_applications = (req, res) => {
-    res.status(200).send("OK");
+exports.by_applications_status = (req, res) => {
+    Applications.aggregate(
+        [
+            {
+                $group: {
+                    _id: { status: "$status" },
+                    count: { $sum: 1 }
+                }
+            }
+        ],
+        function (err, result) {
+            if (err) {
+                res.sensStatus(500);
+            } else {
+                res.json(result[0]);
+            }
+        }
+    )
 };

@@ -1,0 +1,94 @@
+{
+	"info": {
+		"_postman_id": "9b5154a3-0ca7-4522-aa39-60d3d9309a74",
+		"name": "STATS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TRIPS PER MANAGER",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/stats/tripsPerManager",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"stats",
+						"tripsPerManager"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APPLICATIONS PER TRIP",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/stats/applicationPerTrip",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"stats",
+						"applicationPerTrip"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TRIP PRICE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/stats/tripPrice",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"stats",
+						"tripPrice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "STATUS APPLICATIONS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/stats/statusApplications",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"stats",
+						"statusApplications"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

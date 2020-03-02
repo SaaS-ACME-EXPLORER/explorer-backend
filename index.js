@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('./config');
 const dbConnect = require('./db');
+const datawarehouse = require('./app/controllers/dataWareHouseController')
 const { httpLogger, logger } = require('./app/utils');
 
 
@@ -37,6 +38,8 @@ dbConnect().then(() => {
     logger.error('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
+
+datawarehouse.createDataWareHouseJob()
 
 
 module.exports = app;
