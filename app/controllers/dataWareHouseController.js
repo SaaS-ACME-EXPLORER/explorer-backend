@@ -138,6 +138,10 @@ let TripsPerManager = (callback) => {
 
 }
 let ApplicationPerTrips = (callback) => {
+
+
+
+
   Applications.aggregate(
     [
       {
@@ -209,42 +213,25 @@ let PricePerTrips = (callback) => {
 }
 
 function computeRatio(callback) {
+
+  let total = await Applications.count();
+
   Applications.aggregate(
     [
       {
-        $facet: {
-          totalperStatus: [{
-            $group: {
-              _id: { status: "$status" },
-              count: { $sum: 1 }
-            }
-          }],
-          total: [{$group : {_id:null, totalOrders:{$sum:1}}}],
-          
-        },
-        
+        $group: {
+          _id: { status: "$status" },
+          count: { $sum: 1 },
+        }
       },
-
-   //   { $project: { name: 1, workdays: { $divide: [ "$totalperStatus._id", 8 ] } } }
-
-
+      {
+        $project: {
+          _id: 0,
+          status: "$_id.status",
+          percentage: { $divide: ["$count", 10000] }
+        }
+      }
     ]
-    // {$project : { 
-    // "placementMonth" : { "$month" : "$placementMoment" }, 
-    // "placementYear" : {"$year" : "$placementMoment" },
-    // "cancelationMoment": 1 }},
-    // {$match:{ "placementMonth" : new Date().getMonth()+1,
-    //                          "placementYear" : new Date().getFullYear() 
-    //                          }},
-    //         {$facet:{
-    //     totalOrdersCurrentMonth: [{$group : {_id:null, totalOrders:{$sum:1}}}],
-    //     totalCancelledOrdersCurrentMonth: [
-    //     {$match:{"cancelationMoment": { $exists: true }}},
-    //     {$group : {_id:null, totalOrders:{$sum:1}}}]
-    //     }
-    //         },
-
-    //         {$project: {_id:0,ratioOrdersCancelledCurrentMont: { $divide: [{$arrayElemAt: [ "$totalCancelledOrdersCurrentMonth.totalOrders", 0 ]}, {$arrayElemAt: [ "$totalOrdersCurrentMonth.totalOrders", 0 ]} ]}}} 
     , function (err, res) {
       callback(err, res[0])
     });
