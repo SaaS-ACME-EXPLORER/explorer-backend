@@ -12,14 +12,14 @@ let DataWareHouseSchema = new mongoose.Schema({
   },
 
   // The average, the minimum, the maximum, and the standard deviation of the number of trips managed per manager.
-  minTripsPerManager: [{
+  minTripsPerManager: {
     count: { type: Number, min: 0 },
     manager: { type: Schema.Types.ObjectId }
-  }],
-  maxTripsPerManager: [{
+  },
+  maxTripsPerManager: {
     count: { type: Number, min: 0 },
     manager: { type: Schema.Types.ObjectId }
-  }],
+  },
   averageTripsPerManager: {
     type: Number,
     min: 0
@@ -30,14 +30,14 @@ let DataWareHouseSchema = new mongoose.Schema({
   },
 
   // The average, the minimum, the maximum, and the standard deviation of the number of applications per trip.
-  minApplicationsPerTrip: [{
+  minApplicationsPerTrip: {
     count: { type: Number, min: 0 },
     manager: { type: Schema.Types.ObjectId }
-  }],
-  maxAplicationsPerTrip: [{
+  },
+  maxAplicationsPerTrip: {
     count: { type: Number, min: 0 },
     manager: { type: Schema.Types.ObjectId }
-  }],
+  },
   averageApplicationsPerTrip: {
     type: Number,
     min: 0
@@ -48,14 +48,14 @@ let DataWareHouseSchema = new mongoose.Schema({
   },
 
   // The average, the minimum, the maximum, and the standard deviation of the price of the trips.
-  minPricePerTrip: [{
+  minPricePerTrip: {
     count: { type: Number, min: 0 },
     manager: { type: Schema.Types.ObjectId }
-  }],
-  maxPricePerTrip: [{
+  },
+  maxPricePerTrip: {
     count: { type: Number, min: 0 },
     manager: { type: Schema.Types.ObjectId }
-  }],
+  },
   averagePricePerTrip: {
     type: Number,
     min: 0

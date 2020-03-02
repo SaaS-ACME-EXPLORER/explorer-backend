@@ -57,12 +57,14 @@ function createDataWareHouseJob() {
       TripsPerManager,
       ApplicationPerTrips,
       PricePerTrips,
+      computeRatio
       //computeRatioCancelledOrders
     ], function (err, results) {
       if (err) {
         console.log("Error computing datawarehouse: " + err);
       }
       else {
+
         new_dataWareHouse.minTripsPerManager = results[0].min
         new_dataWareHouse.maxTripsPerManager = results[0].max
         new_dataWareHouse.averageTripsPerManager = results[0].avg
@@ -75,17 +77,19 @@ function createDataWareHouseJob() {
         new_dataWareHouse.maxPricePerTrip = results[2].max
         new_dataWareHouse.averagePricePerTrip = results[2].avg
         new_dataWareHouse.standarDeviationPricePerTrip = results[2].stdDev
+        new_dataWareHouse.ratios = results[3]
 
-        // //console.log("Resultados obtenidos por las agregaciones: "+JSON.stringify(results));
-        // new_dataWareHouse.topCancellers = results[0];
-        // new_dataWareHouse.topNotCancellers = results[1];
-        // new_dataWareHouse.bottomNotCancellers = results[2];
-        // new_dataWareHouse.topClerks = results[3];
-        // new_dataWareHouse.bottomClerks = results[4];
-        // new_dataWareHouse.ratioCancelledOrders = results[5];
-        new_dataWareHouse.rebuildPeriod = rebuildPeriod;
-
-        // new_dataWareHouse.save(function (err, datawarehouse) {
+          // //console.log("Resultados obtenidos por las agregaciones: "+JSON.stringify(results));
+          // new_dataWareHouse.topCancellers = results[0];
+          // new_dataWareHouse.topNotCancellers = results[1];
+          // new_dataWareHouse.bottomNotCancellers = results[2];
+          // new_dataWareHouse.topClerks = results[3];
+          // new_dataWareHouse.bottomClerks = results[4];
+          // new_dataWareHouse.ratioCancelledOrders = results[5];
+          new_dataWareHouse.rebuildPeriod = rebuildPeriod;
+          console.log(results)
+          //console.log(new_dataWareHouse)
+          // new_dataWareHouse.save(function (err, datawarehouse) {
         //   if (err) {
         //     console.log("Error saving datawarehouse: " + err);
         //   }
@@ -137,11 +141,8 @@ let TripsPerManager = (callback) => {
 
 
 }
+
 let ApplicationPerTrips = (callback) => {
-
-
-
-
   Applications.aggregate(
     [
       {
@@ -174,9 +175,8 @@ let ApplicationPerTrips = (callback) => {
       callback(err, res[0])
     }
   )
-
-
 }
+
 let PricePerTrips = (callback) => {
   Trips.aggregate([
     {
@@ -208,31 +208,51 @@ let PricePerTrips = (callback) => {
     callback(err, res[0])
   }
   )
+}
+
+let computeRatio = (callback) => {
+  Applications.aggregate([
+    {
+      $facet: {
+        "totalApp": [{ $group: { _id: null, total: { $sum: 1 } } }],
+        "groupedByStatus": [{ $group: { _id: "$status", groupbystatus: { $sum: 1 } } }]
+      }
+    },
+    { $project: { _id: 0, statuses: "$groupedByStatus", apps: "$totalApp.total" } },
+    { $unwind: "$apps" },
+    { $unwind: "$statuses" },
+    { $project: { _id: 0, status: "$statuses._id", ratio: { $divide: ["$statuses.groupbystatus", "$apps"] } } }
+  ],
+    (err, res) => {
+      callback(err, res)
+    })
+
+
+
+  // Applications.countDocuments({}, function(err, total){
+  //   Applications.aggregate(
+  //     [
+  //       {
+  //         $group: {
+  //           _id: { status: "$status" },
+  //           count: { $sum: 1 },
+  //         }
+  //       },
+  //       {
+  //         $project: {
+  //           _id: 0,
+  //           status: "$_id.status",
+  //           percentage: { $divide: ["$count", total] }
+  //         }
+  //       }
+  //     ],
+  //     (err, res) => {
+  //       callback(err, res)
+  //     }
+  //   )
+
+  // });
 
 
 }
 
-function computeRatio(callback) {
-
-  let total = await Applications.count();
-
-  Applications.aggregate(
-    [
-      {
-        $group: {
-          _id: { status: "$status" },
-          count: { $sum: 1 },
-        }
-      },
-      {
-        $project: {
-          _id: 0,
-          status: "$_id.status",
-          percentage: { $divide: ["$count", 10000] }
-        }
-      }
-    ]
-    , function (err, res) {
-      callback(err, res[0])
-    });
-};
