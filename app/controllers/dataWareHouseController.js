@@ -58,7 +58,6 @@ function createDataWareHouseJob() {
       ApplicationPerTrips,
       PricePerTrips,
       computeRatio
-      //computeRatioCancelledOrders
     ], function (err, results) {
       if (err) {
         console.log("Error computing datawarehouse: " + err);
@@ -77,26 +76,17 @@ function createDataWareHouseJob() {
         new_dataWareHouse.maxPricePerTrip = results[2].max
         new_dataWareHouse.averagePricePerTrip = results[2].avg
         new_dataWareHouse.standarDeviationPricePerTrip = results[2].stdDev
-        new_dataWareHouse.ratios = results[3]
+        new_dataWareHouse.ratioApplicationsByStatus = results[3]
 
-          // //console.log("Resultados obtenidos por las agregaciones: "+JSON.stringify(results));
-          // new_dataWareHouse.topCancellers = results[0];
-          // new_dataWareHouse.topNotCancellers = results[1];
-          // new_dataWareHouse.bottomNotCancellers = results[2];
-          // new_dataWareHouse.topClerks = results[3];
-          // new_dataWareHouse.bottomClerks = results[4];
-          // new_dataWareHouse.ratioCancelledOrders = results[5];
           new_dataWareHouse.rebuildPeriod = rebuildPeriod;
-          console.log(results)
-          //console.log(new_dataWareHouse)
-          // new_dataWareHouse.save(function (err, datawarehouse) {
-        //   if (err) {
-        //     console.log("Error saving datawarehouse: " + err);
-        //   }
-        //   else {
-        //     console.log("new DataWareHouse succesfully saved. Date: " + new Date());
-        //   }
-        // });
+          new_dataWareHouse.save(function (err, datawarehouse) {
+          if (err) {
+            console.log("Error saving datawarehouse: " + err);
+          }
+          else {
+            console.log("new DataWareHouse succesfully saved. Date: " + new Date());
+          }
+        });
       }
     });
   }, null, true, 'Europe/Madrid');

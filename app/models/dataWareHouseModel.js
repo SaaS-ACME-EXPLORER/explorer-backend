@@ -13,12 +13,12 @@ let DataWareHouseSchema = new mongoose.Schema({
 
   // The average, the minimum, the maximum, and the standard deviation of the number of trips managed per manager.
   minTripsPerManager: {
-    count: { type: Number, min: 0 },
-    manager: { type: Schema.Types.ObjectId }
+    type: Number,
+    min: 0
   },
   maxTripsPerManager: {
-    count: { type: Number, min: 0 },
-    manager: { type: Schema.Types.ObjectId }
+    type: Number,
+    min: 0
   },
   averageTripsPerManager: {
     type: Number,
@@ -31,12 +31,12 @@ let DataWareHouseSchema = new mongoose.Schema({
 
   // The average, the minimum, the maximum, and the standard deviation of the number of applications per trip.
   minApplicationsPerTrip: {
-    count: { type: Number, min: 0 },
-    manager: { type: Schema.Types.ObjectId }
+    type: Number,
+    min: 0
   },
   maxAplicationsPerTrip: {
-    count: { type: Number, min: 0 },
-    manager: { type: Schema.Types.ObjectId }
+    type: Number,
+    min: 0
   },
   averageApplicationsPerTrip: {
     type: Number,
@@ -49,12 +49,12 @@ let DataWareHouseSchema = new mongoose.Schema({
 
   // The average, the minimum, the maximum, and the standard deviation of the price of the trips.
   minPricePerTrip: {
-    count: { type: Number, min: 0 },
-    manager: { type: Schema.Types.ObjectId }
+    type: Number,
+    min: 0
   },
   maxPricePerTrip: {
-    count: { type: Number, min: 0 },
-    manager: { type: Schema.Types.ObjectId }
+    type: Number,
+    min: 0
   },
   averagePricePerTrip: {
     type: Number,
@@ -66,11 +66,13 @@ let DataWareHouseSchema = new mongoose.Schema({
   },
 
   // The ratio of applications grouped by status.
-  ratioApplicationsByStatus: {
-    type: Number,
-    max: 1,
-    min: 0
-  },
+  ratioApplicationsByStatus:
+    [
+      {
+        status: { type: String },
+        ratio: { type: Number, min: 0, max: 1 }
+      }
+    ]
 
 }, { strict: false });
 
