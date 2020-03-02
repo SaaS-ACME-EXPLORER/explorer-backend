@@ -72,7 +72,13 @@ let DataWareHouseSchema = new mongoose.Schema({
         status: { type: String },
         ratio: { type: Number, min: 0, max: 1 }
       }
-    ]
+    ],
+  // The average price range that explorers indicate in their finders.
+  avgPriceFinders:
+  {
+    type: Number,
+    min: 0
+  }
 
 }, { strict: false });
 

@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const DataWareHouse = require('../models/dataWareHouseModel'); //created model loading here
 const Trips = require('../models/Trip');
 const Applications = require('../models/Application');
+const Actors = require('../models/Actor');
 
 exports.list_all_indicators = function (req, res) {
   console.log('Requesting indicators');
@@ -57,7 +58,8 @@ function createDataWareHouseJob() {
       TripsPerManager,
       ApplicationPerTrips,
       PricePerTrips,
-      computeRatio
+      computeRatio,
+      computeAvgPriceFinder
     ], function (err, results) {
       if (err) {
         console.log("Error computing datawarehouse: " + err);
@@ -77,9 +79,12 @@ function createDataWareHouseJob() {
         new_dataWareHouse.averagePricePerTrip = results[2].avg
         new_dataWareHouse.standarDeviationPricePerTrip = results[2].stdDev
         new_dataWareHouse.ratioApplicationsByStatus = results[3]
+        // Level b
+        new_dataWareHouse.avgPriceFinders = results[4].avg
 
-          new_dataWareHouse.rebuildPeriod = rebuildPeriod;
-          new_dataWareHouse.save(function (err, datawarehouse) {
+
+        new_dataWareHouse.rebuildPeriod = rebuildPeriod;
+        new_dataWareHouse.save(function (err, datawarehouse) {
           if (err) {
             console.log("Error saving datawarehouse: " + err);
           }
@@ -200,49 +205,56 @@ let PricePerTrips = (callback) => {
   )
 }
 
+
 let computeRatio = (callback) => {
-  Applications.aggregate([
-    {
-      $facet: {
-        "totalApp": [{ $group: { _id: null, total: { $sum: 1 } } }],
-        "groupedByStatus": [{ $group: { _id: "$status", groupbystatus: { $sum: 1 } } }]
+
+  Applications.countDocuments({}, function (err, total) {
+    Applications.aggregate(
+      [
+        {
+          $group: {
+            _id: { status: "$status" },
+            count: { $sum: 1 },
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            status: "$_id.status",
+            percentage: { $divide: ["$count", total] }
+          }
+        }
+      ],
+      (err, res) => {
+        callback(err, res)
       }
-    },
-    { $project: { _id: 0, statuses: "$groupedByStatus", apps: "$totalApp.total" } },
-    { $unwind: "$apps" },
-    { $unwind: "$statuses" },
-    { $project: { _id: 0, status: "$statuses._id", ratio: { $divide: ["$statuses.groupbystatus", "$apps"] } } }
-  ],
+    )
+
+  });
+}
+let computeAvgPriceFinder = (callback) => {
+
+  Actors.aggregate(
+    [
+
+      { $group: { _id: "$_id", min: { $sum: "$finder.minPrice" }, max: { $sum: "$finder.maxPrice" } } },
+      {
+        $project: {
+          _id: "$_id",
+          subtraction: { $subtract: ["$max", "$min"] }
+        }
+      },
+      {
+        $group: {
+          _id: 0,
+          avg: { $avg: "$subtraction" }
+        }
+      }
+
+    ],
     (err, res) => {
-      callback(err, res)
-    })
-
-
-
-  // Applications.countDocuments({}, function(err, total){
-  //   Applications.aggregate(
-  //     [
-  //       {
-  //         $group: {
-  //           _id: { status: "$status" },
-  //           count: { $sum: 1 },
-  //         }
-  //       },
-  //       {
-  //         $project: {
-  //           _id: 0,
-  //           status: "$_id.status",
-  //           percentage: { $divide: ["$count", total] }
-  //         }
-  //       }
-  //     ],
-  //     (err, res) => {
-  //       callback(err, res)
-  //     }
-  //   )
-
-  // });
-
-
+      callback(err, res[0])
+    }
+  )
 }
 
