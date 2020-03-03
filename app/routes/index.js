@@ -5,7 +5,7 @@ var dataWareHouseRoutes = require('./dataWareHouseRoutes');
 var tripRoutes = require('./tripRoutes');
 var storageRoutes = require('./storageRoutes');
 var resourceRoutes = require('./resourceRoutes');
-var statRoutes = require('./statRoutes');
+var loginRoutes = require('./loginRoutes');
 
 
 
@@ -19,5 +19,5 @@ module.exports = (app) => {
     tripRoutes(app);
     storageRoutes(app);
     resourceRoutes(app);
-    statRoutes(app);
+    loginRoutes(app);
 }

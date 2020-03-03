@@ -4,6 +4,7 @@
 const Actor = require('../models/Actor');
 const actorUtils = require('../utils/actorUtils');
 var bcrypt = require('bcrypt');
+var admin = require('firebase-admin');
 
 exports.list_all_actors = async function (req, res) {
 
@@ -112,14 +113,14 @@ exports.update_an_actor = function (req, res) {
 
     const updatedActor = req.body.updatedActor;
     const updatedActorId = req.params.actorId;
-    const actorId = req.body.actorId; 
+    const actorId = req.body.actorId;
 
-    if(!updatedActor || !actorId || !updatedActorId){
+    if (!updatedActor || !actorId || !updatedActorId) {
         logger.error("Invalid updatedActor, actorId or updatedActorId");
-        res.status(400).json({"error": "Invalid updatedActor, actorId or updatedActorId"});
+        res.status(400).json({ "error": "Invalid updatedActor, actorId or updatedActorId" });
         return;
     }
-    
+
     let authorized = actorId == updatedActorId;
 
     if (authorized) {
@@ -204,3 +205,31 @@ exports.change_password = async function (req, res) {
     }
 
 };
+
+exports.login_an_actor = async function (req, res) {
+    var email = req.body.email;
+    var password = req.body.password;
+    try {
+        let actor = await Actor.findOne({ email: email });
+        if (actor && bcrypt.compareSync(password, actor.password)) {
+            try {
+                var customToken = await admin.auth().createCustomToken(actor.email);
+
+                actor.customToken = customToken;
+                res.json(actor);
+
+            } catch (error) {
+                console.log("Error creating custom token:", error);
+            }
+        } else {
+            res.json({ status: "error", message: "Invalid email/password!!!", data: null });
+        }
+    } catch (error) {
+        res.status(500);
+        res.json({ message: "Internal Error" });
+    }
+};
+
+exports.logout_an_actor = function (req, res) {
+    res.sendStatus(200);
+}

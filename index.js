@@ -17,7 +17,14 @@ logger.info('Setting up API server');
 app.use(httpLogger);
 app.use(bodyParser.json());
 
+var admin = require("firebase-admin");
 
+var serviceAccount = require("./acme-explorer-1bfd7-firebase-adminsdk-77ef8-20c05cb372");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://acme-explorer-1bfd7.firebaseio.com"
+});
 
 // Setting up database
 logger.info("Setting up database");

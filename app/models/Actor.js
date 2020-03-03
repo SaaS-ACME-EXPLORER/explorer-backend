@@ -68,6 +68,9 @@ var ActorSchema = new Schema({
     type: Boolean,
     default: true
   },
+  customToken: {
+    type: String
+  },
   finder: {
     type: FinderSchema,
     required: function () { return this.role === 'EXPLORER' }
