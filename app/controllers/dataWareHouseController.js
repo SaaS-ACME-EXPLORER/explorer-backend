@@ -59,7 +59,8 @@ function createDataWareHouseJob() {
       ApplicationPerTrips,
       PricePerTrips,
       computeRatio,
-      computeAvgPriceFinder
+      computeAvgPriceFinder,
+      computeTopFinderKeywords
     ], function (err, results) {
       if (err) {
         console.log("Error computing datawarehouse: " + err);
@@ -81,6 +82,7 @@ function createDataWareHouseJob() {
         new_dataWareHouse.ratioApplicationsByStatus = results[3]
         // Level b
         new_dataWareHouse.avgPriceFinders = results[4].avg
+        new_dataWareHouse.topFinderKeywords = results[5]
 
 
         new_dataWareHouse.rebuildPeriod = rebuildPeriod;
@@ -254,6 +256,21 @@ let computeAvgPriceFinder = (callback) => {
     ],
     (err, res) => {
       callback(err, res[0])
+    }
+  )
+}
+
+let computeTopFinderKeywords = (callback) => {
+
+  Actors.aggregate(
+    [
+      { $group: { _id: "$finder.keyWord", counter: { $sum: 1 } } },
+      { $sort: { counter: -1 } },
+      { $project:  {_id:0, keyword: "$_id", counter: "$counter"}},
+      { $limit: 10 }
+    ],
+    (err, res) => {
+      callback(err, res)
     }
   )
 }

@@ -78,7 +78,12 @@ let DataWareHouseSchema = new mongoose.Schema({
   {
     type: Number,
     min: 0
-  }
+  },
+  // The top 10 key words that the explorers indicate in their finders.
+  topFinderKeywords: [{
+    keyword: { type: String },
+    count: { type: Number, min: 0 }
+  }]
 
 }, { strict: false });
 
