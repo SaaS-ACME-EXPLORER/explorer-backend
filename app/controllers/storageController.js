@@ -47,7 +47,7 @@ exports.store_json_insertMany = async function (req, res) {
   };
 
   // version con json separado por modelo
-  let templates = fs.readFileSync(BASE_DIR + '\\app\\utils\\templates.hbs', { encoding: 'utf8' });
+  let templates = fs.readFileSync(BASE_DIR + '/app/utils/templates.hbs', { encoding: 'utf8' });
   let parsedTemplate = JSON.parse(dummyjson.parse(templates, { helpers: myHelpers }));
 
   // intento de sincronizacion, todo dentro del mismo objecto

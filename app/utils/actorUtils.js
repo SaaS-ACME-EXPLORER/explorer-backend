@@ -10,7 +10,7 @@ exports.getRoleById = async function getRoleById(actorId) {
         if (actor) {
             return actor.role;
         } else {
-            return null;
+            return undefined;
         }
     }
 }

@@ -1,0 +1,89 @@
+{
+	"info": {
+		"_postman_id": "3aada76c-a599-4d78-86ce-a19bf8fb164c",
+		"name": "AUTH",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET IDTOKEN FIREBASE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU4MzY5MzcyMSwiZXhwIjoxNTgzNjk3MzIxLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay03N2VmOEBhY21lLWV4cGxvcmVyLTFiZmQ3LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstNzdlZjhAYWNtZS1leHBsb3Jlci0xYmZkNy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6Im1hbmFnZXJzZHN3c2FkMkBmYWtlbWFpbC5jb20ifQ.qIsFjwUkT3H_Gjw5komspgnfQubWKcbQhAmf_Xow8h8oVdU9IDawof6CsqKj9riGVCKid9ZUXLWgGCIsielP7u9DnQeefj2arSVRzLg9nJG6qg-0V8wPHW9Ron3usuplQ6zOwLvPY4n7I9WekWsK7RQmcb14JJbO-mjySm59uGpwqXOMqAFMTHSDxICZnZd1XUAPqOonw0xmf5dvaHXKr-PfGXtFCOK7i5G4wSlQJxRkUk-Pyk3Itou4jSoYxWtJeCAIusZNiKFBhomuODdShr7qYwQBLSuppmW8ZfdDC1Y3nP6JngW5I3tRmc0_Dx3J_FDuGeqFNVejj76VxlB6ng\",\n\t\"returnSecureToken\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=AIzaSyD1JoPNcFbhi_2It1maGfuiB4P7U6jkfFE\n",
+					"protocol": "https",
+					"host": [
+						"identitytoolkit",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"v1",
+						"accounts:signInWithCustomToken"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "AIzaSyD1JoPNcFbhi_2It1maGfuiB4P7U6jkfFE\n"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOGIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"managersdswsad2@fakemail.com\",\n\t\"password\": \"mypa2sss1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/v1/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
