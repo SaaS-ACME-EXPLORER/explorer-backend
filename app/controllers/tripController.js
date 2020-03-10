@@ -4,6 +4,7 @@
 const Trip = require('../models/Trip');
 const Application = require('../models/Application');
 const Resource = require('../models/Resources');
+const FinderCache = require('../models/FinderCache');
 const logger = require('../utils/logger');
 const actorUtils = require('../utils/actorUtils');
 
@@ -251,18 +252,87 @@ exports.finder_find_all = async function (req, res) {
     const actorId = req.query.actorId;
     let finder = actorUtils.getActorFinder(actorId);
     if (finder) {
-        let limit = await getFinderResultsLimit();
-        let aggregate = buildAggregate(finder, limit);
-        if (aggregate) {
-            return Trip.aggregate(aggregate);
+        let timeLimitCache = await getTimeLimitCache(timeLimitCache);
+        let finderCache = await getFinderCache(actorId);
+        if (finderCache) {
+            //Check if we must search in cacho or db
+            let searchInCache = cacheSearch(timeLimitCache, finderCache);
+            if(searchInCache){
+                FinderCache.find({actorId: actorId},function(error, finderCache){
+                    if(error){
+                        logger.error(`Error when searching finder cache results for an actor with id: ${actorId}`);
+                        res.sendStatus(500);
+                    }else{
+                        //search in cache
+                        res.status(200).send(finderCache.results);
+                    }
+                });
+            }else{
+                searchTrips(res);
+            }
         } else {
-            // In case all finder criterias are null
-            return Trip.find().limit(limit);
+            //finder not defined 
+            searchTrips(res);
         }
     } else {
         logger.error("The actor must be an explorer");
         res.status(403).json({ "error": "The actor must be an explorer" });
     }
+}
+
+// Check if the last search is higher than the limit stablished to search in db or cache
+var cacheSearch = function(timeLimitCache, finderCache){
+    let currentDate = new Date();
+    let difference = Math.abs(currentDate - finderCache.createdAt); // in miliseconds
+    let timeLimitCacheMs = timeLimitCache * 60000; // convert to miliseconds
+    if(difference > timeLimitCache){
+        return false;
+    }
+    return true;
+}
+
+//Search the trips
+var searchTrips = async function (res) {
+    let results;
+    let limit = await getFinderResultsLimit();
+    let aggregate = buildAggregate(finder, limit);
+    try {
+        if (aggregate) {
+            results = await Trip.aggregate(aggregate);
+        } else {
+            // In case all finder criterias are null
+            results = Trip.find().limit(limit);
+        }
+        res.status(200).send(results);
+        return;
+    } catch (error) {
+        logger.error('Unexpedtec error');
+        res.sendStatus(500);
+        return;
+    }
+}
+
+//Get the time limit in minutes for the cache storage (default: 1h, max: 24h)
+var getTimeLimitCache = async function () {
+    await Resource.findOne({ name: 'timeLimitCache' }, function (error, resource) {
+        if (error || !resource) {
+            // The results of a finder are cached for one hour by default
+            logger.error("Error when searching a resource with name: timeLimitCache");
+            return 60;
+        } else {
+            if (!isNaN(resource.value)) {
+                try {
+                    let val = parseInt(resource.value);
+                    //(default: 1h, max: 24h)
+                    let limit = (val > 60 && val <= 1440) ? val : 60;
+                    return limit;
+                } catch (error) {
+                    logger.error("Unexpected error (possibly parsing resource.value)")
+                    return 60;
+                }
+            }
+        }
+    });
 }
 
 //Get the results limit that match the finder criterias (default: 10, max: 100)
@@ -290,6 +360,19 @@ var getFinderResultsLimit = async function () {
     });
 
 };
+
+//Get finder cache by actor id
+var getFinderCache = async function (actorId) {
+    FinderCache.findOne({ actorId: actorId }, function (error, finderCache) {
+        if (error || !finderCache) {
+            logger.error(`Error when searching finderCache by actor id: ${actorId}`);
+            return null;
+        } else {
+            return finderCache;
+        }
+    });
+};
+
 
 var buildAggregate = function (finder, limit) {
     let aggregate = [];
