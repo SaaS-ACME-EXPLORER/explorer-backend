@@ -1,0 +1,42 @@
+version: '3'
+services: 
+    explorer:
+        build: .
+        ports: 
+            - "127.0.0.1:${PORT}:${PORT}"
+        networks: 
+            service-tier:
+        depends_on:
+            - mongo
+        restart: on-failure
+        volumes: 
+            - "logsvol:/usr/src/app/logs"
+        environment: 
+            - NODE_ENV=${NODE_ENV}
+            - PORT=${PORT}
+            - DBPORT=${DBPORT}
+            - VIRTUAL_HOST=${VIRTUAL_HOST} #NECESARIO PARA PROXY
+            - VIRTUAL_PORT=${PORT}
+    mongo:
+        image: "mongo"
+        expose: 
+            - "${DBPORT}"
+        command: --port ${DBPORT} --logpath /var/log/mongodb/mongodb.log
+        # ports:
+        #     - "${DBPORT}:${DBPORT}"
+        networks:
+            service-tier:
+                aliases: 
+                    - "mongo${DBPORT}"
+        volumes: 
+            - "datavol:/data/db"
+            - "logsvol:/var/log/mongodb" 
+volumes: 
+    datavol:
+    logsvol: 
+       external: true # docker-ompose no crea al volumen, crearlo manual
+
+networks: 
+    service-tier: 
+            external: true
+
