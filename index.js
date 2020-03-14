@@ -39,7 +39,7 @@ dbConnect().then(() => {
     process.exit();
 });
 
-datawarehouse.createDataWareHouseJob()
+//datawarehouse.createDataWareHouseJob()
 
 
 module.exports = app;

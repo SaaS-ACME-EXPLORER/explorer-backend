@@ -3,7 +3,7 @@ services:
     explorer:
         build: .
         ports: 
-            - "127.0.0.1:${PORT}:8080"
+            - "127.0.0.1:${PORT}:${PORT}"
         networks: 
             service-tier:
         depends_on:
@@ -22,6 +22,8 @@ services:
         expose: 
             - "${DBPORT}"
         command: --port ${DBPORT} --logpath /var/log/mongodb/mongodb.log
+        # ports:
+        #     - "${DBPORT}:${DBPORT}"
         networks:
             service-tier:
                 aliases: 
