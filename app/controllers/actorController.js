@@ -6,6 +6,7 @@ const actorUtils = require('../utils/actorUtils');
 var bcrypt = require('bcrypt');
 var admin = require('firebase-admin');
 var authController = require('./authController');
+const logger = require('../utils/logger');
 
 exports.list_all_actors = async function (req, res) {
     if (req.query.actorId) {
@@ -222,8 +223,12 @@ exports.change_password = async function (req, res) {
 exports.login_an_actor = async function (req, res) {
     var email = req.query.email;
     var password = req.query.password;
+    logger.info("email:", email);
+    logger.info("password:", password);
     try {
         let actor = await Actor.findOne({ email: email });
+
+
         if (actor && bcrypt.compareSync(password, actor.password)) {
             try {
                 var customToken = await admin.auth().createCustomToken(actor.email);
