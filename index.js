@@ -24,7 +24,8 @@ logger.info("Setting up database");
 
 mongoose.Promise = global.Promise;
 
-logger.info(`Connecting to ${config.url + config.dbPort + ':' + config.dbPort + '/' + config.collectionName}!`);
+// logger.info(`Connecting to ${config.url + config.dbPort + ':' + config.dbPort + '/' + config.collectionName}!`);
+logger.info(`Connecting to ${config.url}!`);
 
 dbConnect().then(() => {
     logger.info("Successfully connected to the database")
