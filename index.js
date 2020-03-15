@@ -6,6 +6,14 @@ const config = require('./config');
 const dbConnect = require('./db');
 const datawarehouse = require('./app/controllers/dataWareHouseController')
 const { httpLogger, logger } = require('./app/utils');
+const https = require("https");
+const fs = require("fs");
+
+
+const options = {
+    key: fs.readFileSync('./app/keys/server.key'),
+    cert: fs.readFileSync('./app/keys/server.cert')
+  };
 
 
 global.BASE_API_PATH = "/api/v1";
@@ -51,6 +59,9 @@ dbConnect().then(() => {
     logger.info("Successfully connected to the database")
     // Require routes routes
     require('./app/routes/')(app);
+   
+    // https.createServer(options, app).listen(config.port);
+
     app.listen(config.port, () => {
         logger.info(`Express App listening on port ${config.port}!`)
         // require('./app/services/populate.js').populate();
