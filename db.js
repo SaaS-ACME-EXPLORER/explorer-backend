@@ -4,8 +4,8 @@ const config = require('./config');
 const dbConnect = () => {
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error: '));
-    const connectionURL = config.url + config.dbPort + ':' + config.dbPort + '/' + config.collectionName;
-    return mongoose.connect(connectionURL, {
+    // const connectionURL = config.url + config.dbPort + ':' + config.dbPort + '/' + config.collectionName;
+    return mongoose.connect(config.url, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false,
