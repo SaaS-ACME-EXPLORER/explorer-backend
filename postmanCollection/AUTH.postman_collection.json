@@ -19,7 +19,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU4MzY5MzcyMSwiZXhwIjoxNTgzNjk3MzIxLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay03N2VmOEBhY21lLWV4cGxvcmVyLTFiZmQ3LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstNzdlZjhAYWNtZS1leHBsb3Jlci0xYmZkNy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6Im1hbmFnZXJzZHN3c2FkMkBmYWtlbWFpbC5jb20ifQ.qIsFjwUkT3H_Gjw5komspgnfQubWKcbQhAmf_Xow8h8oVdU9IDawof6CsqKj9riGVCKid9ZUXLWgGCIsielP7u9DnQeefj2arSVRzLg9nJG6qg-0V8wPHW9Ron3usuplQ6zOwLvPY4n7I9WekWsK7RQmcb14JJbO-mjySm59uGpwqXOMqAFMTHSDxICZnZd1XUAPqOonw0xmf5dvaHXKr-PfGXtFCOK7i5G4wSlQJxRkUk-Pyk3Itou4jSoYxWtJeCAIusZNiKFBhomuODdShr7qYwQBLSuppmW8ZfdDC1Y3nP6JngW5I3tRmc0_Dx3J_FDuGeqFNVejj76VxlB6ng\",\n\t\"returnSecureToken\": true\n}",
+					"raw": "{\n\t\"token\": \"eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU4Mzc4MDk5MiwiZXhwIjoxNTgzNzg0NTkyLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay03N2VmOEBhY21lLWV4cGxvcmVyLTFiZmQ3LmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstNzdlZjhAYWNtZS1leHBsb3Jlci0xYmZkNy5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6Im1hbmFnZXJzZHN3c2FkMkBmYWtlbWFpbC5jb20ifQ.c-454pDJb3GV2F_94GDDqC67kq2UqauvZxPA6DFgoMY0UG2DQCLDoNYX8U0AY30MZheHaeNBB5pzPcbcmfmlvsIWvLkBRY4EW8vhWlxPQfQ35XxQMuoishUuNU9le2aRc5Yln8IGbFGYfs9Th2Lt5ssM6hahIaWkYzOafqWntnILs6WB6atI4WZhedx1LBmheTAWDedmSgWFaw-vapjRwaHDyb4L8DSCup3Pm2yPTiBGvjxAsYGKanRERgkhFp1iBS9szH27lGuaO_4VXuaRQ7V3JEFQCojSMq93au17MLRcA_GpTgyXlM2zzWLjbMD2xsVLO8xlKD1A3YPAe8qUVw\",\n\t\"returnSecureToken\": true\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -50,8 +50,11 @@
 		},
 		{
 			"name": "LOGIN",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -70,7 +73,7 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/v1/login",
+					"raw": "localhost:3000/api/v1/login?email=managersdswsad2@fakemail.com&password=mypa2sss1234",
 					"host": [
 						"localhost"
 					],
@@ -79,6 +82,16 @@
 						"api",
 						"v1",
 						"login"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "managersdswsad2@fakemail.com"
+						},
+						{
+							"key": "password",
+							"value": "mypa2sss1234"
+						}
 					]
 				}
 			},
