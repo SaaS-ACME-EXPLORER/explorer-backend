@@ -220,8 +220,8 @@ exports.change_password = async function (req, res) {
 };
 
 exports.login_an_actor = async function (req, res) {
-    var email = req.body.email;
-    var password = req.body.password;
+    var email = req.query.email;
+    var password = req.query.password;
     try {
         let actor = await Actor.findOne({ email: email });
         if (actor && bcrypt.compareSync(password, actor.password)) {
