@@ -8,7 +8,8 @@ const datawarehouse = require('./app/controllers/dataWareHouseController')
 const { httpLogger, logger } = require('./app/utils');
 
 
-global.BASE_API_PATH = "/api/v1"
+global.BASE_API_PATH = "/api/v1";
+global.BASE_API_PATH_V2 = "/api/v2";
 global.BASE_DIR = __dirname;
 
 var app = express();
@@ -20,6 +21,17 @@ app.use(bodyParser.json());
 var admin = require("firebase-admin");
 
 var serviceAccount = require("./acme-explorer-1bfd7-firebase-adminsdk-77ef8-20c05cb372");
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, idToken" //ojo, que si metemos un parametro propio por la cabecera hay que declararlo aquí para que no de el error CORS
+    );
+    //res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+    next();
+});
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
