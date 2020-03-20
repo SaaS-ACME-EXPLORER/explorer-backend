@@ -6,6 +6,7 @@ const actorUtils = require('../utils/actorUtils');
 var bcrypt = require('bcrypt');
 var admin = require('firebase-admin');
 var authController = require('./authController');
+const logger = require('../utils/logger');
 
 exports.list_all_actors = async function (req, res) {
     if (req.query.actorId) {
@@ -127,27 +128,37 @@ exports.read_an_actor = async function (req, res) {
 exports.update_an_actor = async function (req, res) {
     const updatedActor = req.body.updatedActor;
     const updatedActorId = req.params.actorId;
-    const actorId = req.body.actorId;
+    const idToken = req.header.idToken;
 
-    if (!updatedActor || !actorId || !updatedActorId) {
+    if (!updatedActor || !updatedActorId || !idToken) {
         logger.error("Invalid updatedActor, actorId or updatedActorId");
-        res.status(400).json({ "error": "Invalid updatedActor, actorId or updatedActorId" });
+        res.status(400).json({ "error": "Invalid updatedActor or updatedActorId" });
         return;
     }
 
-    let authorized = actorId == updatedActorId;
+    admin.auth().verifyIdToken(idToken).then(function (decodedToken) {
+        var uid = decodedToken.uid;
+        updatedActor.email = uid;
 
-    if (authorized) {
-        Actor.findByIdAndUpdate(updatedActorId, updatedActor, { new: true }, function (err, actor) {
-            if (err) {
-                res.status(404).send(err);
-            } else {
-                res.status(200).send(actor);
-            }
-        });
-    } else {
-        res.sendStatus(403);
-    }
+        let actorBd = Actor.findOne({email: uid});
+
+        if(actorBd._id == updatedActorId){
+            Actor.findByIdAndUpdate(updatedActorId, updatedActor, { new: true }, function (err, actor) {
+                if (err) {
+                    res.status(404).send(err);
+                } else {
+                    res.status(200).send(actor);
+                }
+            });
+        } else {
+            res.sendStatus(403);
+        }
+    }).catch(function (err) {
+        // Handle error
+        console.log("Error en autenticación: " + err);
+        res.status(403); //an access token is valid, but requires more privileges
+        res.json({ message: 'The actor has not the required roles', error: err });
+    });
 };
 
 exports.change_an_actor_status = async function (req, res) {
@@ -222,8 +233,12 @@ exports.change_password = async function (req, res) {
 exports.login_an_actor = async function (req, res) {
     var email = req.query.email;
     var password = req.query.password;
+    logger.info("email:", email);
+    logger.info("password:", password);
     try {
         let actor = await Actor.findOne({ email: email });
+
+
         if (actor && bcrypt.compareSync(password, actor.password)) {
             try {
                 var customToken = await admin.auth().createCustomToken(actor.email);
