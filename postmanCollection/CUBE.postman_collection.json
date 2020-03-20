@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "121d5ac4-1715-4c44-9f43-cb4367cda2b9",
+		"name": "CUBE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Cube explorer and year and month",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/cube/?explorerId=5e6e298195fa4a146b70f204&year=2020&month=3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"cube",
+						""
+					],
+					"query": [
+						{
+							"key": "explorerId",
+							"value": "5e6e298195fa4a146b70f204"
+						},
+						{
+							"key": "year",
+							"value": "2020"
+						},
+						{
+							"key": "month",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cube explorer and year",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/cube/?explorerId=5e6e298195fa4a146b70f204&year=2020",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"cube",
+						""
+					],
+					"query": [
+						{
+							"key": "explorerId",
+							"value": "5e6e298195fa4a146b70f204"
+						},
+						{
+							"key": "year",
+							"value": "2020"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cube explorer and month",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/cube/?explorerId=5e6e298195fa4a146b70f204&month=3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"cube",
+						""
+					],
+					"query": [
+						{
+							"key": "explorerId",
+							"value": "5e6e298195fa4a146b70f204"
+						},
+						{
+							"key": "month",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cube explorer amount",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/cube/?explorerId=5e6e298195fa4a146b70f204&year=2020&month=3&v=2767",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"cube",
+						""
+					],
+					"query": [
+						{
+							"key": "explorerId",
+							"value": "5e6e298195fa4a146b70f204"
+						},
+						{
+							"key": "year",
+							"value": "2020"
+						},
+						{
+							"key": "month",
+							"value": "3"
+						},
+						{
+							"key": "v",
+							"value": "2767"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cube explorer amount with operator",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/v1/cube/?explorerId=5e6e298195fa4a146b70f204&year=2020&month=3&v=2767&q=smaller than or equal",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"cube",
+						""
+					],
+					"query": [
+						{
+							"key": "explorerId",
+							"value": "5e6e298195fa4a146b70f204"
+						},
+						{
+							"key": "year",
+							"value": "2020"
+						},
+						{
+							"key": "month",
+							"value": "3"
+						},
+						{
+							"key": "v",
+							"value": "2767"
+						},
+						{
+							"key": "q",
+							"value": "smaller than or equal"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
