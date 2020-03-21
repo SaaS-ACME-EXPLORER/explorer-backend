@@ -4,6 +4,7 @@
 const Sponsorship = require('../models/Sponsorship');
 const logger = require('../utils/logger');
 const mongoose = require('mongoose');
+const ActorUtil = require('../utils/actorUtils');
 
 let checkSponsorId = (req, res) => {
     if (!req.query['sponsorId']) {
@@ -12,9 +13,33 @@ let checkSponsorId = (req, res) => {
     }
 }
 
+let checkIsSponsor = async (req, res) => {
+    let sponsorId = req.query['sponsorId']
+    let isActorSponsor = await ActorUtil.isSponsor(sponsorId);
+    if (!isActorSponsor) {
+        res.status(403);
+        res.json({ message: "403 Forbidden request" });
+        return
+    }
+}
+
+
+
+let checkIsAdministrator= async (req, res) => {
+    let sponsorId = req.query['sponsorId']
+    let isActorSponsor = await ActorUtil.isAdministrator(sponsorId);
+    if (!isActorSponsor) {
+        res.status(403);
+        res.json({ message: "403 Forbidden request" });
+        return
+    }
+}
+
+
 exports.list_all_sponsorships = async (req, res) => {
     try {
         checkSponsorId(req, res)
+        checkIsSponsor(req, res)
         let sponsorId = req.query['sponsorId']
         let paid = req.query['paid'] || true
         let numperpages = parseInt(req.query['limit']) || 5;
@@ -34,6 +59,8 @@ exports.list_all_sponsorships = async (req, res) => {
 };
 
 exports.create_sponsorship = async (req, res) => {
+    //checkIsAdministrator(req, res)
+    checkIsSponsor(req, res)
     let sponsorship = new Sponsorship(req.body)
     try {
         let response = await sponsorship.save();
@@ -49,6 +76,7 @@ exports.create_sponsorship = async (req, res) => {
 exports.get_a_sponsorship = async (req, res) => {
     try {
         checkSponsorId(req, res)
+        checkIsSponsor(req, res)
         let sponsorId = req.query['sponsorId']
         if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             res.status(404);
@@ -77,6 +105,7 @@ exports.get_a_sponsorship = async (req, res) => {
 exports.pay_a_sponsorship = async (req, res) => {
     try {
         checkSponsorId(req, res)
+        checkIsSponsor(req, res)
         let sponsorId = req.query['sponsorId']
         if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             return res.status(404).send({
@@ -110,6 +139,7 @@ exports.pay_a_sponsorship = async (req, res) => {
 exports.update_a_sponsorship = async (req, res) => {
     try {
         checkSponsorId(req, res)
+        checkIsSponsor(req, res)
         let sponsorId = req.query['sponsorId']
         if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             res.status(404);
@@ -142,6 +172,7 @@ exports.update_a_sponsorship = async (req, res) => {
 exports.delete_a_sponsorship = (req, res) => {
     try {
         checkSponsorId(req, res)
+        checkIsSponsor(req, res)
         let sponsorId = req.query['sponsorId']
         if (!mongoose.Types.ObjectId.isValid(req.params.sponsorship_id)) {
             res.status(404);
