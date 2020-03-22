@@ -57,7 +57,7 @@ exports.rebuildPeriod = function (req, res) {
 function createDataWareHouseJob() {
   computeDataWareHouseJob = new CronJob(rebuildPeriod, function () {
     var new_dataWareHouse = new DataWareHouse();
-    console.log('Cron job submitted. Rebuild period: ' + rebuildPeriod);
+    //console.log('Cron job submitted. Rebuild period: ' + rebuildPeriod);
     async.parallel([
       TripsPerManager,
       ApplicationPerTrips,
@@ -70,7 +70,9 @@ function createDataWareHouseJob() {
         console.log("Error computing datawarehouse: " + err);
       }
       else {
-
+        if (results[0]== undefined || results[1]==undefined|| results[2]== undefined) {
+          return
+        }
         new_dataWareHouse.minTripsPerManager = results[0].min
         new_dataWareHouse.maxTripsPerManager = results[0].max
         new_dataWareHouse.averageTripsPerManager = results[0].avg
