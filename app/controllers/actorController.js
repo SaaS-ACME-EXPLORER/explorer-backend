@@ -128,7 +128,7 @@ exports.read_an_actor = async function (req, res) {
 exports.update_an_actor = async function (req, res) {
     const updatedActor = req.body.updatedActor;
     const updatedActorId = req.params.actorId;
-    const idToken = req.header.idToken;
+    const idToken = req.headers.idtoken;
 
     if (!updatedActor || !updatedActorId || !idToken) {
         logger.error("Invalid updatedActor, actorId or updatedActorId");
@@ -136,11 +136,11 @@ exports.update_an_actor = async function (req, res) {
         return;
     }
 
-    admin.auth().verifyIdToken(idToken).then(function (decodedToken) {
+    admin.auth().verifyIdToken(idToken).then(async function (decodedToken) {
         var uid = decodedToken.uid;
         updatedActor.email = uid;
 
-        let actorBd = Actor.findOne({email: uid});
+        let actorBd = await Actor.findOne({email: uid});
 
         if(actorBd._id == updatedActorId){
             Actor.findByIdAndUpdate(updatedActorId, updatedActor, { new: true }, function (err, actor) {

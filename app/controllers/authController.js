@@ -59,8 +59,6 @@ exports.verifyUser = function (requiredRoles) {
 
                 else {
                     console.log('The actor exists in our DB');
-                    console.log('actor: ' + actor);
-
                     var isAuth = false;
                     for (var i = 0; i < requiredRoles.length; i++) {
                         if (actor.role == requiredRoles[i]) {
