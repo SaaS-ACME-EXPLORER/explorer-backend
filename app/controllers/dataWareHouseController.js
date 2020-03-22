@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const DataWareHouse = require('../models/dataWareHouseModel'); //created model loading here
 const Trips = require('../models/Trip');
 const Applications = require('../models/Application');
+const Cube = require('../models/Cube');
 const Actors = require('../models/Actor');
+const moment = require('moment')
 
 exports.list_all_indicators = function (req, res) {
   console.log('Requesting indicators');
@@ -38,7 +40,8 @@ var CronTime = require('cron').CronTime;
 //'*/30 * * * * *' cada 30 segundos
 //'*/10 * * * * *' cada 10 segundos
 //'* * * * * *' cada segundo
-var rebuildPeriod = '0 0 * * * *' ;  //El que se usará por defecto
+var rebuildPeriod = '* * * * * *';  //El que se usará por defecto
+var cubePeriod = '* 00 * * * *';  //El que se usará por defecto
 var computeDataWareHouseJob;
 
 exports.rebuildPeriod = function (req, res) {
@@ -49,6 +52,7 @@ exports.rebuildPeriod = function (req, res) {
 
   res.json(req.query.rebuildPeriod);
 };
+
 
 function createDataWareHouseJob() {
   computeDataWareHouseJob = new CronJob(rebuildPeriod, function () {
@@ -99,7 +103,21 @@ function createDataWareHouseJob() {
   }, null, true, 'Europe/Madrid');
 }
 
+
+
+function createQubeRecollector() {
+  computeDataWareHouseJob = new CronJob(cubePeriod, function () {
+    console.log("executed cube")
+    async.parallel([
+      cube
+    ], function (err, results) {
+      // console.log(err)
+    });
+  }, null, true, 'Europe/Madrid');
+}
+
 module.exports.createDataWareHouseJob = createDataWareHouseJob;
+module.exports.createQubeRecollector = createQubeRecollector;
 
 let TripsPerManager = (callback) => {
 
@@ -266,12 +284,51 @@ let computeTopFinderKeywords = (callback) => {
     [
       { $group: { _id: "$finder.keyWord", counter: { $sum: 1 } } },
       { $sort: { counter: -1 } },
-      { $project:  {_id:0, keyword: "$_id", counter: "$counter"}},
+      { $project: { _id: 0, keyword: "$_id", counter: "$counter" } },
       { $limit: 10 }
     ],
     (err, res) => {
       callback(err, res)
     }
   )
+}
+
+
+
+let cube = (callback) => {
+  let today = new Date();
+  let yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(00, 00, 00)
+  today.setHours(23, 59, 00)
+
+  Applications.find({ status: "ACCEPTED", "updatedAt": { "$gte": yesterday, "$lt": today } }, (err, res) => {
+    if (res) {
+      res.forEach((app) => {
+        Trips.findById({ _id: app.tripId }, (err, trip) => {
+          let moneyPaid = 0;
+          let explorerId = app.explorerId;
+          trip.stages.forEach((stage) => {
+            moneyPaid += stage.price
+          })
+          let objToInsert = {
+            applicationId: app._id.toString(),
+            amount: moneyPaid,
+            explorerId: explorerId.toString(),
+            tripId: app.tripId,
+            month: app.updatedAt.getMonth() + 1,
+            year: app.updatedAt.getFullYear()
+          }
+          let cube = new Cube(objToInsert);
+          cube.save((err) => { })
+
+
+        })
+
+      })
+    }
+
+  })
+  callback(null)
 }
 

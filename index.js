@@ -70,7 +70,7 @@ dbConnect().then(() => {
     logger.error('Could not connect to the database. Exiting now...', err);
     process.exit();
 });
-
+datawarehouse.createQubeRecollector()
 datawarehouse.createDataWareHouseJob()
 
 
