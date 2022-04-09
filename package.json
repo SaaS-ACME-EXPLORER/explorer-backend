@@ -30,7 +30,7 @@
     "dateformat": "^3.0.3",
     "express": "^4.17.1",
     "firebase-admin": "^8.9.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "https": "^1.0.0",
     "mongoose": "^5.9.2",
     "mongoose-unique-validator": "^2.0.3",
